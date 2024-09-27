@@ -21,6 +21,17 @@ class UnMobile extends JPanel implements Runnable {
                 telleExcp.printStackTrace();
             }
         }
+        // pour revenir à gauche
+        for (sonDebDessin = saLargeur - sonPas; sonDebDessin > 0; sonDebDessin -= sonPas) {
+            // la position de départ est saLargeur - sonPas, c'est-à-dire la position d'arrêt de la première boucle,
+            // on décrémente sonDebDessin de sonPas pour revenir à gauche
+            repaint();
+            try {
+                Thread.sleep(sonTemps);
+            } catch (InterruptedException telleExcp) {
+                telleExcp.printStackTrace();
+            }
+        }
     }
 
     public void paintComponent(Graphics telCG) {
