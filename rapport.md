@@ -1,0 +1,1 @@
+# Programmation parallèle sur machine à mémoire partagée
