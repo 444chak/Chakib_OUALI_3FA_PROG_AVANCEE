@@ -1,4 +1,4 @@
-//programme d'un mobile se deplacant de la gauche vers la droite de la fenetre-ecran
+//programme d'un mobile se déplaçant de la gauche vers la droite de la fenêtre-écran
 
 import java.awt.*;
 import javax.swing.*;
