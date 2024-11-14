@@ -1,10 +1,7 @@
 package TP3_BAL;
 
-import java.io.*;
-import java.util.*;
-
 /**
- * 
+ * Classe Producteur
  */
 public class Producteur extends Thread {
 
@@ -14,24 +11,29 @@ public class Producteur extends Thread {
     public Producteur() {
     }
 
-    /**
-     * 
-     */
-    public String lettre;
-
-    /**
-     * 
-     */
     public Boite_aux_lettres boite_aux_lettres;
 
     /**
-     * 
+     * Fonction pour écrire une lettre
      */
+    @Override
     public void run() {
         try {
-            boite_aux_lettres.ecrire(lettre);
+            for (char lettre = 'A'; lettre <= 'Z'; lettre++) {
+                Thread.sleep(500);
+                boolean added = boite_aux_lettres.ecrire(String.valueOf(lettre));
+
+                if (added) {
+                    System.out.println("[" + Thread.currentThread().getName() + "]"
+                            + "[" + boite_aux_lettres.getStock() + "] Ecriture de la lettre " + lettre);
+                } else {
+                    System.out.println("[" + Thread.currentThread().getName() + "]"
+                            + "[" + boite_aux_lettres.getStock() + "] La boite est pleine");
+                }
+            }
+
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.out.println("[" + Thread.currentThread().getName() + "]" + e.getMessage());
         }
     }
 
