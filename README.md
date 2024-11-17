@@ -19,6 +19,8 @@ Le tableau ci-dessous résume les différences entre la programmation séquentie
 | **Parallèle**| Divise une tâche en sous-tâches exécutées simultanément sur plusieurs unités de calcul (multi-cœur, GPU).| Accélération du traitement pour les tâches indépendantes |
 | **Concurrente**| Permet l’intercalage de plusieurs tâches qui progressent de manière alternée (peuvent sembler simultanées mais utilisent une même unité de calcul). | Optimisation de l’utilisation des ressources, réactivité |
 
+Les travaux sont effectués sur les machines de l'IUT (ou ma machine personnelle) qui sont des machines à mémoire partagée. Une machine à mémoire partager indique que chaque processeur a accès à la même mémoire. A la différence d'une machine à mémoire distribuée où chaque processeur a sa propre mémoire et communique par réseau.
+
 Les travaux sont réalisés en Java.
 Le premier TP concerne la création d'une fenêtre graphique avec un mobile se déplaçant de gauche à droite. Le mobile
 doit repartir en sens inverse lorsqu'il atteint une extrémité de la fenêtre.
@@ -234,6 +236,8 @@ Avec cette implémentation, le producteur écrit une lettre dans la boîte aux l
 En se basant sur le [cours du blog de José Paumard](https://blog.paumard.org/cours/java-api/chap05-concurrent-queues.html), on implémente la boîte aux lettres de la même manière que la boulangerie.
 
 Le comportement attendu est que le thread producteur ajoute des lettres à la boîte aux lettres et que le thread consommateur les retire et les affiche.
+
+La classe `Boite_aux_lettres` encapsule en quelque sorte une zone mémoire et les méthodes `ecrire` et `retirer` sont des wrappers de `offer` et `poll` de l'interface `BlockingQueue`. L'interface `BlockingQueue` est un monitor qui permet de gérer l'accès à la ressource partagée.
 
 La boîte aux lettres implémente désormais l'interface `BlockingQueue` et contient une liste de lettres.
 

@@ -24,7 +24,7 @@ public class Consommateur extends Thread {
     public void run() {
         try {
             while (true) {
-                Thread.sleep(rand.nextInt(1000));
+                Thread.sleep(rand.nextInt(2000));
                 String lettre = boite_aux_lettres.retirer();
                 if (lettre != null) {
                     System.out.println("[" + Thread.currentThread().getName() + "]"

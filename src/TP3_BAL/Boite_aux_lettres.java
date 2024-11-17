@@ -23,7 +23,7 @@ public class Boite_aux_lettres {
      * @param lettre Lettre à écrire
      * @return boolean Retourne vrai si la lettre a été écrite
      */
-    public synchronized boolean ecrire(String lettre) throws Exception {
+    public boolean ecrire(String lettre) throws Exception {
         return boite_aux_lettres.offer(lettre, 2000, TimeUnit.MILLISECONDS);
     }
 
@@ -32,7 +32,7 @@ public class Boite_aux_lettres {
      *
      * @return String Retourne la lettre retirée
      */
-    public synchronized String retirer() throws Exception {
+    public String retirer() throws Exception {
         return boite_aux_lettres.poll(200, TimeUnit.MILLISECONDS);
     }
 
