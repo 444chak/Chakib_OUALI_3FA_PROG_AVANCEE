@@ -4,7 +4,7 @@ package MONTE_CARLO.Pi;
  * Approximates PI using the Monte Carlo method. Demonstrates use of Callables,
  * Futures, and thread pools.
  */
-public class Pi {
+public class Main {
 
     public static void main(String[] args) throws Exception {
         long total;
