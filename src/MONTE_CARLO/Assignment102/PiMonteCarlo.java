@@ -1,4 +1,4 @@
-package MONTE_CARLO;
+package MONTE_CARLO.Assignment102;
 // Estimate the value of Pi using Monte-Carlo Method, using parallel program
 
 import java.util.concurrent.ExecutorService;

@@ -1,4 +1,4 @@
-package MONTE_CARLO;
+package MONTE_CARLO.Pi;
 
 import java.util.ArrayList;
 import java.util.List;
