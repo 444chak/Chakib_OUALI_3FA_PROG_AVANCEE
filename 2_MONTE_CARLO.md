@@ -1,4 +1,8 @@
-# Rapport - Calcul de $\pi$ par la méthode de Monte Carlo
+# Rapport - Calcul de $\pi$ par la méthode de Monte Carlo - Programmation Avancée
+
+Chakib OUALI - 3FA - 2024
+
+---
 
 ## Introduction
 

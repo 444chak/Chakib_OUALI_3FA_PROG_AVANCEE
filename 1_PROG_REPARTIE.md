@@ -1,4 +1,4 @@
-# Rapport de Programmation Avancée
+# Rapport - Introduction à la Programmation Répartie - Programmation Avancée
 
 Chakib OUALI - 3FA - 2024
 
