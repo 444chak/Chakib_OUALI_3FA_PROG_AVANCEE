@@ -2,11 +2,11 @@
 
 ## Introduction
 
-Ce rapport présente l'implémentation et l'analyse de la méthode de Monte Carlo pour estimer la valeur de π. La méthode de Monte Carlo est une technique de simulation qui utilise des nombres aléatoires pour résoudre des problèmes mathématiques ou physiques. Dans ce cas, nous utilisons cette méthode pour estimer la valeur de π en générant des points aléatoires dans un carré et en comptant combien de ces points tombent à l'intérieur d'un cercle inscrit dans ce carré.
+Ce rapport présente l'implémentation et l'analyse de la méthode de Monte Carlo pour estimer la valeur de $\pi$. La méthode de Monte Carlo est une technique de simulation qui utilise des nombres aléatoires pour résoudre des problèmes mathématiques ou physiques. Dans ce cas, nous utilisons cette méthode pour estimer la valeur de $\pi$ en générant des points aléatoires dans un carré et en comptant combien de ces points tombent à l'intérieur d'un cercle inscrit dans ce carré.
 
 ## Principe de la méthode de Monte Carlo
 
-La méthode de Monte Carlo pour estimer π repose sur le fait que la probabilité qu'un point aléatoire tombe à l'intérieur d'un cercle est proportionnelle à la surface du cercle par rapport à la surface du carré qui l'entoure. En générant un grand nombre de points aléatoires et en comptant combien de ces points tombent à l'intérieur du cercle, nous pouvons estimer la valeur de π.
+La méthode de Monte Carlo pour estimer $\pi$ repose sur le fait que la probabilité qu'un point aléatoire tombe à l'intérieur d'un cercle est proportionnelle à la surface du cercle par rapport à la surface du carré qui l'entoure. En générant un grand nombre de points aléatoires et en comptant combien de ces points tombent à l'intérieur du cercle, nous pouvons estimer la valeur de $\pi$.
 
 TODO : Pseudo-code, maths fait en cours au propre (avec graphique etc.)
 
@@ -14,41 +14,28 @@ TODO : Pseudo-code, maths fait en cours au propre (avec graphique etc.)
 
 TODO : Rajouter UML
 
-L'implémentation de cette méthode en Java utilise plusieurs classes pour structurer le code et tirer parti des fonctionnalités de parallélisme offertes par le langage. Les principales classes utilisées sont :
+La méthode de Monte Carlo est implémentée en Java à partir de deux projets différents. Une, nommée *Assignment102*, développée par Karthik Jain (TODO:Source), et l'autre, *Pi*, développée par le Dr. Steve Kautz de l'IOWA State University (TODO:Source). Ces deux projets utilisent des threads pour exécuter les tâches Monte Carlo en parallèle et calculer la valeur de $\pi$ en fonction des résultats obtenus.
 
-- `Main` : Contient la méthode principale pour exécuter le programme.
-- `PiMonteCarlo` : Classe principale pour estimer la valeur de π en utilisant la méthode de Monte Carlo.
-- `MonteCarlo` : Classe qui représente une tâche de simulation Monte Carlo.
-- `Master` : Coordonne l'exécution des tâches Monte Carlo en utilisant un pool de threads.
-- `Worker` : Représente une tâche individuelle de simulation Monte Carlo.
+## Analyse des sources & Réorganisation
 
-## Analyse des sources
+### *Assignment102*
 
-### Classe `Main`
+À l'origine, le code source de *Assignment102* était contenu dans un seul fichier Java avec trois classes : `Assignment102`, `PiMonteCarlo` et `MonteCarlo`. La première classe est en réalité le point d'entrée du programme, qu'on inscrit dans un fichier séparé `Main.java`. Les deux autres classes sont des classes utilitaires pour le calcul de $\pi$ par la méthode de Monte Carlo. Pour une meilleure organisation du code, nous avons décidé de séparer ces classes dans des fichiers distincts : `Main.java`, `PiMonteCarlo.java` et `MonteCarlo.java`.
 
-La classe `Main` initialise une instance de `PiMonteCarlo` avec un nombre donné de lancers et mesure le temps d'exécution pour estimer la valeur de π.
+`Main.java` contient les appels aux méthodes de calcul de $\pi$ et l'affichage des résultats. On remarque qu'elle affiche la valeur estimée de $\pi$ par le programme, la différence avec la valeur réelle de $\pi$ (récupérée de `Math.PI`) et le temps d'exécution du programme.
 
-### Classe PiMonteCarlo
+`PiMonteCarlo.java` contient la classe `PiMonteCarlo` qui initialise et appel les threads pour le calcul de $\pi$ par la méthode de Monte Carlo. Cette classe utilise la classe `MonteCarlo` pour effectuer les calculs.
 
-La classe PiMonteCarlo utilise un pool de threads pour exécuter les tâches Monte Carlo en parallèle et calcule la valeur de π en fonction des résultats obtenus.
+`MonteCarlo.java` contient la classe `MonteCarlo` qui effectue les calculs de Monte Carlo pour estimer la valeur de $\pi$. Cette classe implémente l'interface `Runnable` pour être exécutée par un thread.
 
-### Classe MonteCarlo
+### *Pi*
 
-La classe MonteCarlo représente une tâche de simulation Monte Carlo qui génère des points aléatoires et compte ceux qui tombent à l'intérieur du cercle.
+Le code source de *Pi* est également organisé en trois classes : `Pi`, `Master` et `Worker`. La classe `Pi` est le point d'entrée du programme. Et les deux classes suivent le modèle maître-esclave pour le calcul de $\pi$ par la méthode de Monte Carlo. Comme pour *Assignment102*, nous avons décidé de séparer ces classes dans des fichiers distincts : `Main.java` qui correspond à la classe `Pi`, `Master.java` et `Worker.java`.
 
-### Classe Master
+`Main.java` contient l'appel à la classe `Master` pour lancer le calcul de $\pi$ par la méthode de Monte Carlo. Elle affiche également les résultats obtenus.
 
-La classe `Master` coordonne l'exécution des tâches Monte Carlo en utilisant un pool de threads. Elle soumet les tâches à un `ExecutorService` et attend que toutes les tâches soient terminées pour calculer la valeur finale de π.
+`Master.java` contient la classe `Master` qui initialise et gère les tâches de calcul de Monte Carlo. Elle utilise la classe `Worker` pour effectuer les calculs.
 
-### Classe Worker
+`Worker.java` contient la classe `Worker` qui effectue les calculs de Monte Carlo pour estimer la valeur de $\pi$. Cette classe implémente l'interface `Callable` pour renvoyer un résultat.
 
-La classe `Worker` représente une tâche individuelle de simulation Monte Carlo. Elle implémente l'interface `Callable` pour permettre la récupération du résultat de chaque tâche.
-
-## Réorganisation des fichiers
-
-Pour améliorer la structure du projet, chaque classe doit être placée dans un fichier séparé :
-
-- `Main.java`
-- `PiMonteCarlo.java`
-- `MonteCarlo.java`
-- `Master.java`
+TODO : Sources, crédits
