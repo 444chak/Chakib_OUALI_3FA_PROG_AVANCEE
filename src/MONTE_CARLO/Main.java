@@ -27,6 +27,6 @@ public class Main {
         System.out.println("total from Master = " + total);
 
         FileWriterUtil fileWriterUtil = new FileWriterUtil("Pi", machineName);
-        fileWriterUtil.writeToFile("Pi: " + total);
+        // fileWriterUtil.writeToFile("Pi: " + total);
     }
 }

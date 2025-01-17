@@ -16,9 +16,11 @@ public class FileWriterUtil {
         this.filePath = prefix + AlgorithmName + "_" + dateString + "_" + machineName + ".txt";
     }
 
-    public void writeToFile(String content) {
+    public void writeToFile(String error, String estimation, String numberCount, String nbProcess, String time) {
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-            writer.write(content);
+            String c = error + " " + estimation + " " + numberCount + " " + nbProcess + " " + time;
+            writer.write(c);
             writer.newLine();
         } catch (IOException e) {
         }
