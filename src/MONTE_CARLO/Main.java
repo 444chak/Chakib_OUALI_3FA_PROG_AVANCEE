@@ -6,6 +6,8 @@ import MONTE_CARLO.Pi.Master;
 public class Main {
 
     public static void main(String[] args) throws Exception {
+        String machineName = System.getenv("COMPUTERNAME");
+
         // Assignment 102
         System.out.println("--------Assignment 102--------");
         PiMonteCarlo PiVal = new PiMonteCarlo(10000000);
@@ -23,5 +25,8 @@ public class Main {
         long total;
         total = new Master().doRun(5000000, 10);
         System.out.println("total from Master = " + total);
+
+        FileWriterUtil fileWriterUtil = new FileWriterUtil("Pi", machineName);
+        fileWriterUtil.writeToFile("Pi: " + total);
     }
 }
