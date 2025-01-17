@@ -40,15 +40,14 @@ public class MasterSocket {
         } catch (IOException ioE) {
         }
 
-        for (int i = 0; i < numWorkers; i++) {
-            System.out.println("Enter worker" + i + " port : ");
-            try {
-                s = bufferRead.readLine();
-                System.out.println("You select " + s);
-            } catch (IOException ioE) {
-            }
-        }
-
+        // for (int i = 0; i < numWorkers; i++) {
+        //     System.out.println("Enter worker" + i + " port : ");
+        //     try {
+        //         s = bufferRead.readLine();
+        //         System.out.println("You select " + s);
+        //     } catch (IOException ioE) {
+        //     }
+        // }
         //create worker's socket
         for (int i = 0; i < numWorkers; i++) {
             sockets[i] = new Socket(ip, tab_port[i]);
@@ -67,15 +66,17 @@ public class MasterSocket {
 
         while (message_repeat.equals("y")) {
 
+            total = 0;
+
             startTime = System.currentTimeMillis();
             // initialize workers
             for (int i = 0; i < numWorkers; i++) {
-                writer[i].println(message_to_send);          // send a message to each worker
+                writer[i].println(message_to_send); // send a message to each worker
             }
 
             //listen to workers's message 
             for (int i = 0; i < numWorkers; i++) {
-                tab_total_workers[i] = reader[i].readLine();      // read message from server
+                tab_total_workers[i] = reader[i].readLine(); // read message from server
                 System.out.println("Client sent: " + tab_total_workers[i]);
             }
 

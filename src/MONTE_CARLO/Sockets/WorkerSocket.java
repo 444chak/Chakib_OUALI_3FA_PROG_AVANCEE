@@ -2,6 +2,7 @@ package MONTE_CARLO.Sockets;
 
 import java.io.*;
 import java.net.*;
+import java.util.Random;
 
 /**
  * Worker is a server. It computes PI by Monte Carlo method and sends the result
@@ -33,14 +34,23 @@ public class WorkerSocket {
         PrintWriter pWrite = new PrintWriter(new BufferedWriter(new OutputStreamWriter(soc.getOutputStream())), true);
         String str;
         while (isRunning) {
-            str = bRead.readLine();          // read message from Master
+            str = bRead.readLine(); // read message from Master
             if (!(str.equals("END"))) {
                 System.out.println("Server receives totalCount = " + str);
 
-                // compute
+                long circleCount = 0;
+                int numIterations = Integer.parseInt(str);
+                Random prng = new Random();
+                for (int j = 0; j < numIterations; j++) {
+                    double x = prng.nextDouble();
+                    double y = prng.nextDouble();
+                    if ((x * x + y * y) < 1) {
+                        ++circleCount;
+                    }
+                }
+                pWrite.println(circleCount); // send number of points inside the disk
                 System.out.println("TODO : compute Monte Carlo and send total");
 
-                pWrite.println(str);         // send number of points in quarter of disk
             } else {
                 isRunning = false;
             }
