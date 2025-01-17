@@ -5,7 +5,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-class PiMonteCarlo {
+
+
+public class PiMonteCarlo {
 
     AtomicInteger nAtomSuccess;
     int nThrows;

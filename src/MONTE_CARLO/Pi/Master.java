@@ -7,7 +7,7 @@ import java.util.concurrent.*;
 /**
  * Creates workers to run the Monte Carlo simulation and aggregates the results.
  */
-class Master {
+public class Master {
 
     public long doRun(int totalCount, int numWorkers) throws InterruptedException, ExecutionException {
 
