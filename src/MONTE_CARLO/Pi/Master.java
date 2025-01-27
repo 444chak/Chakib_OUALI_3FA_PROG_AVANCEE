@@ -1,5 +1,6 @@
 package MONTE_CARLO.Pi;
 
+import MONTE_CARLO.Result;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -9,7 +10,7 @@ import java.util.concurrent.*;
  */
 public class Master {
 
-    public long doRun(int totalCount, int numWorkers) throws InterruptedException, ExecutionException {
+    public Result doRun(int totalCount, int numWorkers, Boolean print) throws InterruptedException, ExecutionException {
 
         long startTime = System.currentTimeMillis();
 
@@ -34,16 +35,25 @@ public class Master {
 
         long stopTime = System.currentTimeMillis();
 
-        System.out.println("\nPi : " + pi);
-        System.out.println("Error: " + (Math.abs((pi - Math.PI)) / Math.PI) + "\n");
+        if (print) {
+            System.out.println("\nPi : " + pi);
+            System.out.println("Error: " + (Math.abs((pi - Math.PI)) / Math.PI) + "\n");
 
-        System.out.println("Ntot: " + totalCount * numWorkers);
-        System.out.println("Available processors: " + numWorkers);
-        System.out.println("Time Duration (ms): " + (stopTime - startTime) + "\n");
+            System.out.println("Ntot: " + totalCount * numWorkers);
+            System.out.println("Available processors: " + numWorkers);
+            System.out.println("Time Duration (ms): " + (stopTime - startTime) + "\n");
 
-        System.out.println((Math.abs((pi - Math.PI)) / Math.PI) + " " + totalCount * numWorkers + " " + numWorkers + " " + (stopTime - startTime));
+            System.out.println((Math.abs((pi - Math.PI)) / Math.PI) + " " + totalCount * numWorkers + " " + numWorkers + " " + (stopTime - startTime));
+        }
 
         exec.shutdown();
-        return total;
+        double error = (Math.abs((pi - Math.PI)) / Math.PI);
+        double estimation = pi;
+        int ntot = totalCount * numWorkers;
+        int nbProcess = numWorkers;
+        long time = stopTime - startTime;
+        Result result = new Result(total, error, estimation, ntot, nbProcess, time);
+        // return total, error, estimation, ntot, nbProcess, time;
+        return result;
     }
 }
