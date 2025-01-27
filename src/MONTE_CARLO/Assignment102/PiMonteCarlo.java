@@ -1,11 +1,10 @@
 package MONTE_CARLO.Assignment102;
 // Estimate the value of Pi using Monte-Carlo Method, using parallel program
 
+import MONTE_CARLO.Result;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
-
-
 
 public class PiMonteCarlo {
 
@@ -32,5 +31,14 @@ public class PiMonteCarlo {
         }
         value = 4.0 * nAtomSuccess.get() / nThrows;
         return value;
+    }
+
+    public Result getResult() {
+        double error = (Math.abs((value - Math.PI)) / Math.PI);
+        int ntot = nThrows;
+        int nbProcess = Runtime.getRuntime().availableProcessors();
+        long time = 0;
+        Result result = new Result(nAtomSuccess.get(), error, value, ntot, nbProcess, time);
+        return result;
     }
 }
