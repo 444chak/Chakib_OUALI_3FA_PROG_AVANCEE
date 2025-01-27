@@ -14,13 +14,17 @@ public class FileWriterUtil {
         String prefix = "./src/MONTE_CARLO/out/";
         String dateString = new java.text.SimpleDateFormat("yy-MM-dd__HH-mm-ss").format(new Date());
         this.filePath = prefix + AlgorithmName + "_" + dateString + "_" + machineName + ".txt";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            writer.write("Error\tEstimation\tNtot\tNbProcess\tTime\tTotal");
+            writer.newLine();
+        } catch (IOException e) {
+        }
     }
 
-    public void writeToFile(String error, String estimation, String numberCount, String nbProcess, String time) {
+    public void writeToFile(Result result) {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-            String c = error + " " + estimation + " " + numberCount + " " + nbProcess + " " + time;
-            writer.write(c);
+            writer.write(result.getError() + "\t" + result.getEstimation() + "\t" + result.getNtot() + "\t" + result.getNbProcess() + "\t" + result.getTime() + "\t" + result.getTotal());
             writer.newLine();
         } catch (IOException e) {
         }
