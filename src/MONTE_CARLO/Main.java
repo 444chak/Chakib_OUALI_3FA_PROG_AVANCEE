@@ -8,25 +8,42 @@ public class Main {
     public static void main(String[] args) throws Exception {
         String machineName = System.getenv("COMPUTERNAME");
 
+        int numberOfRuns = 10;
+        int totalCount = 12000;
+        int workers = 1;
+
         // Assignment 102
         System.out.println("--------Assignment 102--------");
-        PiMonteCarlo PiVal = new PiMonteCarlo(10000000);
-        long startTime = System.currentTimeMillis();
-        double value = PiVal.getPi();
-        long stopTime = System.currentTimeMillis();
-        System.out.println("Approx value:" + value);
-        System.out.println("Difference to exact value of pi: " + (value - Math.PI));
-        System.out.println("Error: " + (value - Math.PI) / Math.PI * 100 + " %");
-        System.out.println("Available processors: " + Runtime.getRuntime().availableProcessors());
-        System.out.println("Time Duration: " + (stopTime - startTime) + "ms");
+        // define file 
+        FileWriterUtil fileWriterUtilAssignment102 = new FileWriterUtil("Assignment102", machineName);
 
+        for (int i = 0; i < numberOfRuns; i++) {
+            System.out.println("Run " + i);
+            // Run program
+            PiMonteCarlo PiVal = new PiMonteCarlo(totalCount);
+            long startTime = System.currentTimeMillis();
+            PiVal.getPi();
+            long stopTime = System.currentTimeMillis();
+
+            // write to file
+            Result resultAssignment = PiVal.getResult();
+            resultAssignment.setTime(stopTime - startTime);
+            fileWriterUtilAssignment102.writeToFile(resultAssignment);
+        }
         // Pi
         System.out.println("\n--------Pi--------");
-        long total;
-        total = new Master().doRun(5000000, 10);
-        System.out.println("total from Master = " + total);
-
+        // define file
         FileWriterUtil fileWriterUtil = new FileWriterUtil("Pi", machineName);
-        // fileWriterUtil.writeToFile("Pi: " + total);
+
+        for (int i = 0; i < numberOfRuns; i++) {
+            System.out.println("Run " + i);
+            // Run program
+            Result result;
+            result = new Master().doRun(totalCount, workers, false);
+
+            fileWriterUtil.writeToFile(result);
+        }
+        // Run program
+
     }
 }
