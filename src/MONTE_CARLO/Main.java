@@ -8,11 +8,50 @@ public class Main {
     public static void main(String[] args) throws Exception {
         String machineName = System.getenv("COMPUTERNAME");
 
-        int numberOfRuns = 10;
-        int totalCount = 12000;
-        int workers = 1;
+        int workers;
+        int numberOfRuns;
+        int totalCount;
+
+        if (args.length > 0) {
+            workers = Integer.parseInt(args[0]);
+            numberOfRuns = Integer.parseInt(args[1]);
+            totalCount = Integer.parseInt(args[2]) / workers;
+
+        } else {
+            workers = 1;
+            numberOfRuns = 10;
+            totalCount = 120000000;
+        }
+
+        Boolean assignment102 = false;
+        Boolean pi = true;
 
         // Assignment 102
+        if (assignment102) {
+            runAssignment102(numberOfRuns, totalCount, machineName);
+        }
+        if (pi) {
+            runPi(numberOfRuns, totalCount, machineName, workers);
+        }
+
+    }
+
+    private static void runPi(int numberOfRuns, int totalCount, String machineName, int workers) throws Exception {
+        System.out.println("\n--------Pi--------");
+        // define file
+        FileWriterUtil fileWriterUtil = new FileWriterUtil("Pi", machineName);
+
+        for (int i = 0; i < numberOfRuns; i++) {
+            // Run program
+            Result result;
+            result = new Master().doRun(totalCount, workers, false);
+
+            fileWriterUtil.writeToFile(result);
+        }
+        System.out.println(fileWriterUtil.getFilePath());
+    }
+
+    private static void runAssignment102(int numberOfRuns, int totalCount, String machineName) {
         System.out.println("--------Assignment 102--------");
         // define file 
         FileWriterUtil fileWriterUtilAssignment102 = new FileWriterUtil("Assignment102", machineName);
@@ -30,20 +69,6 @@ public class Main {
             resultAssignment.setTime(stopTime - startTime);
             fileWriterUtilAssignment102.writeToFile(resultAssignment);
         }
-        // Pi
-        System.out.println("\n--------Pi--------");
-        // define file
-        FileWriterUtil fileWriterUtil = new FileWriterUtil("Pi", machineName);
-
-        for (int i = 0; i < numberOfRuns; i++) {
-            System.out.println("Run " + i);
-            // Run program
-            Result result;
-            result = new Master().doRun(totalCount, workers, false);
-
-            fileWriterUtil.writeToFile(result);
-        }
-        // Run program
-
     }
+
 }
