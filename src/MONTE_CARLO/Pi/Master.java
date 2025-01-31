@@ -10,6 +10,16 @@ import java.util.concurrent.*;
  */
 public class Master {
 
+    /**
+     * Run the Monte Carlo simulation.
+     *
+     * @param totalCount The number of points to generate.
+     * @param numWorkers The number of workers to use.
+     * @param print Whether to print the results.
+     * @return The results of the simulation.
+     * @throws InterruptedException
+     * @throws ExecutionException
+     */
     public Result doRun(int totalCount, int numWorkers, Boolean print) throws InterruptedException, ExecutionException {
 
         long startTime = System.currentTimeMillis();
@@ -53,7 +63,6 @@ public class Master {
         int nbProcess = numWorkers;
         long time = stopTime - startTime;
         Result result = new Result(total, error, estimation, ntot, nbProcess, time);
-        // return total, error, estimation, ntot, nbProcess, time;
         return result;
     }
 }
