@@ -13,16 +13,15 @@ path = path / "MONTE_CARLO"
 dir_out = pathlib.Path(__file__).parent.absolute() / "MONTE_CARLO" / "out"
 
 
-def run_java(workers, number_of_experiments, total_count):
+def run_java(workers, number_of_experiments, total_count, faible=False):
     file = path / "Main.java"
-    subprocess.run(["javac", file])
     result = subprocess.run(
         [
             "java",
-            "MONTE_CARLO.Main",
+            file,
             str(workers),
             str(number_of_experiments),
-            str(total_count),
+            str(total_count * workers if faible else total_count),
         ],
         stdout=subprocess.PIPE,
     )
@@ -32,13 +31,13 @@ def run_java(workers, number_of_experiments, total_count):
 nb_workers = [1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 18]
 
 
-def scalabilite_forte(nb_workers, nb_experiments=10, total_count=1200000):
+def scalabilite(nb_workers, nb_experiments=10, total_count=1200000, faible=False):
     speedup_times = []
     for i in nb_workers:
         print(
             "Running Master-Worker with ", i, " workers", "| Total count: ", total_count
         )
-        out = run_java(i, nb_experiments, total_count)
+        out = run_java(i, nb_experiments, total_count, faible)
 
         print(out.strip().split("\n")[-1])
 
@@ -63,7 +62,7 @@ def scalabilite_forte(nb_workers, nb_experiments=10, total_count=1200000):
     return speedup_times
 
 
-def plot_scalabilite_forte(nb_workers, speedup_times, speedup2=None, speedup3=None):
+def plot_scalabilite(nb_workers, speedup_times, speedup2=None, speedup3=None):
     sP = list(map(lambda x: speedup_times[0] / x, speedup_times))
     sP2 = list(map(lambda x: speedup2[0] / x, speedup2)) if speedup2 else None
     sP3 = list(map(lambda x: speedup3[0] / x, speedup3)) if speedup3 else None
@@ -82,8 +81,8 @@ def plot_scalabilite_forte(nb_workers, speedup_times, speedup2=None, speedup3=No
     plt.legend()
     plt.axis("equal")
     max_value = max(nb_workers)
-    plt.xlim(1, max_value)
-    plt.ylim(1, max_value)
+    plt.xlim(0, max_value)
+    plt.ylim(0, max_value)
     plt.yticks(range(1, max_value + 1))
     plt.xticks(range(1, max_value + 1))
     # adjust the size of the plot
@@ -98,13 +97,18 @@ def main():
     parser.add_argument(
         "--experiments", type=int, default=10, help="Number of experiments"
     )
-    parser.add_argument("--count", type=int, default=1200000000, help="Total count")
+    parser.add_argument("--count", type=int, default=120000000, help="Total count")
+    parser.add_argument("--faible", type=bool, default=False, help="Faible")
 
     args = parser.parse_args()
-    speedup_times = scalabilite_forte(nb_workers, args.experiments, args.count)
-    speedup_times2 = scalabilite_forte(nb_workers, args.experiments, args.count // 100)
-    speedup_times3 = scalabilite_forte(nb_workers, args.experiments, args.count // 1000)
-    plot_scalabilite_forte(nb_workers, speedup_times, speedup_times2, speedup_times3)
+    speedup_times = scalabilite(nb_workers, args.experiments, args.count, args.faible)
+    speedup_times2 = scalabilite(
+        nb_workers, args.experiments, args.count // 100, args.faible
+    )
+    speedup_times3 = scalabilite(
+        nb_workers, args.experiments, args.count // 1000, args.faible
+    )
+    plot_scalabilite(nb_workers, speedup_times, speedup_times2, speedup_times3)
 
 
 if __name__ == "__main__":

@@ -57,7 +57,6 @@ public class Main {
         FileWriterUtil fileWriterUtilAssignment102 = new FileWriterUtil("Assignment102", machineName);
 
         for (int i = 0; i < numberOfRuns; i++) {
-            System.out.println("Run " + i);
             // Run program
             PiMonteCarlo PiVal = new PiMonteCarlo(totalCount);
             long startTime = System.currentTimeMillis();
@@ -69,6 +68,7 @@ public class Main {
             resultAssignment.setTime(stopTime - startTime);
             fileWriterUtilAssignment102.writeToFile(resultAssignment);
         }
+        System.out.println(fileWriterUtilAssignment102.getFilePath());
     }
 
 }
