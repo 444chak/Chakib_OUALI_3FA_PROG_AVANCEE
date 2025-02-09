@@ -45,4 +45,9 @@ public class Result {
     public long getTime() {
         return time;
     }
+
+    @Override
+    public String toString() {
+        return "Result{" + "total=" + total + ", error=" + error + ", estimation=" + estimation + ", ntot=" + ntot + ", nbProcess=" + nbProcess + ", time=" + time + '}';
+    }
 }
