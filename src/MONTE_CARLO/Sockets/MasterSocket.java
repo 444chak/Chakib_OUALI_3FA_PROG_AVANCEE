@@ -1,5 +1,7 @@
 package MONTE_CARLO.Sockets;
 
+import MONTE_CARLO.FileWriterUtil;
+import MONTE_CARLO.Result;
 import java.io.*;
 import java.net.*;
 
@@ -10,7 +12,8 @@ import java.net.*;
 public class MasterSocket {
 
     static int maxServer = 8;
-    static final int[] tab_port = {25545, 25546, 25547, 25548, 25549, 25550, 25551, 25552};
+    static final int[] tab_port = {25545, 25546, 25547, 25548, 25549, 25550, 25551, 25552, 25553, 25554, 25555, 25556, 25557, 25558, 25559, 25560}; // 16 ports
+
     static String[] tab_total_workers = new String[maxServer];
     static final String ip = "127.0.0.1";
     static BufferedReader[] reader = new BufferedReader[maxServer];
@@ -25,29 +28,21 @@ public class MasterSocket {
         double pi;
 
         int numWorkers = maxServer;
-        BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-        String s; // for bufferRead
 
         System.out.println("#########################################");
         System.out.println("# Computation of PI by MC method        #");
         System.out.println("#########################################");
 
-        System.out.println("\n How many workers for computing PI (< maxServer): ");
-        try {
-            s = bufferRead.readLine();
-            numWorkers = Integer.parseInt(s);
-            System.out.println(numWorkers);
-        } catch (IOException ioE) {
+        if (args.length > 0) {
+            numWorkers = Integer.parseInt(args[0]);
+            if (numWorkers > maxServer) {
+                throw new IllegalArgumentException("Number of workers must be less than " + maxServer);
+            }
+            totalCount = Integer.parseInt(args[1]) / numWorkers;
+        } else {
+            throw new IllegalArgumentException("Number of workers is required and total count is required");
         }
 
-        // for (int i = 0; i < numWorkers; i++) {
-        //     System.out.println("Enter worker" + i + " port : ");
-        //     try {
-        //         s = bufferRead.readLine();
-        //         System.out.println("You select " + s);
-        //     } catch (IOException ioE) {
-        //     }
-        // }
         //create worker's socket
         for (int i = 0; i < numWorkers; i++) {
             sockets[i] = new Socket(ip, tab_port[i]);
@@ -60,12 +55,10 @@ public class MasterSocket {
         String message_to_send;
         message_to_send = String.valueOf(totalCount);
 
-        String message_repeat = "y";
-
         long stopTime, startTime;
+        FileWriterUtil fileWriterUtil = new FileWriterUtil("PiSocket", System.getenv("COMPUTERNAME"));
 
-        while (message_repeat.equals("y")) {
-
+        for (int j = 0; j < 10; j++) {
             total = 0;
 
             startTime = System.currentTimeMillis();
@@ -97,20 +90,12 @@ public class MasterSocket {
 
             System.out.println((Math.abs((pi - Math.PI)) / Math.PI) + " " + totalCount * numWorkers + " " + numWorkers + " " + (stopTime - startTime));
 
-            System.out.println("\n Repeat computation (y/N): ");
-            try {
-                message_repeat = bufferRead.readLine();
-                System.out.println(message_repeat);
-            } catch (IOException ioE) {
-            }
-        }
+            Result result = new Result(total, (Math.abs((pi - Math.PI)) / Math.PI), pi, totalCount * numWorkers, numWorkers, (stopTime - startTime));
 
-        for (int i = 0; i < numWorkers; i++) {
-            System.out.println("END");     // Send ending message
-            writer[i].println("END");
-            reader[i].close();
-            writer[i].close();
-            sockets[i].close();
+            System.out.println("\n Repeat computation (y/N): ");
+            fileWriterUtil.writeToFile(result);
         }
+        System.out.println(fileWriterUtil.getFilePath());
+
     }
 }
