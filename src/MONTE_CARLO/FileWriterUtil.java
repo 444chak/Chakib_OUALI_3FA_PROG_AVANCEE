@@ -22,7 +22,7 @@ public class FileWriterUtil {
             this.filePath = fpath;
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-            writer.write("Error\tEstimation\tNtot\tNbProcess\tTime\tTotal");
+            writer.write("NbProcess\tError\tEstimation\tNtot\tTime\tTotal");
             writer.newLine();
         } catch (IOException e) {
         }
@@ -32,7 +32,15 @@ public class FileWriterUtil {
     public void writeToFile(Result result) {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-            writer.write(result.getError() + "\t" + result.getEstimation() + "\t" + result.getNtot() + "\t" + result.getNbProcess() + "\t" + result.getTime() + "\t" + result.getTotal());
+            writer.write(result.getNbProcess() + "\t" + result.getError() + "\t" + result.getEstimation() + "\t" + result.getNtot() + "\t" + result.getTime() + "\t" + result.getTotal());
+            writer.newLine();
+        } catch (IOException e) {
+        }
+    }
+
+    public void writeToFile(String string) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            writer.write(string);
             writer.newLine();
         } catch (IOException e) {
         }
