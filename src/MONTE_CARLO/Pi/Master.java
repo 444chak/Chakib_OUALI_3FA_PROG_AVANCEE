@@ -27,7 +27,7 @@ public class Master {
         // Create a collection of tasks
         List<Callable<Long>> tasks = new ArrayList<>();
         for (int i = 0; i < numWorkers; ++i) {
-            tasks.add(new Worker(totalCount));
+            tasks.add(new Worker(totalCount / numWorkers));
         }
 
         // Run them and receive a collection of Futures
