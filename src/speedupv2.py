@@ -1,0 +1,176 @@
+import pathlib
+import subprocess
+import numpy as np
+import matplotlib.pyplot as plt
+import csv
+import time
+
+path = pathlib.Path(__file__).parent.absolute()
+path = path / "MONTE_CARLO"
+
+dir_out = pathlib.Path(__file__).parent.absolute() / "MONTE_CARLO" / "out"
+
+
+def run_java(file, args):
+    result = subprocess.run(
+        [
+            "java",
+            file,
+            *args,
+        ],
+        stdout=subprocess.PIPE,
+    )
+    return result.stdout.decode("utf-8")
+
+
+def clean_out_dir():
+    for f in dir_out.glob("*"):
+        f.unlink()
+
+
+# clean_out_dir()
+
+
+def call_main(workers, number_of_experiments, total_count, algo):
+    file = path / "Main.java"
+    out = run_java(
+        file, [str(workers), str(number_of_experiments), str(total_count), algo]
+    )
+    return out.strip().split("\n")[-1]
+
+
+def call_main_sockets(workers, number_of_experiments, total_count):
+    file = path / "Main.java"
+    outs = []
+    for i in range(1, workers + 1):
+        out = run_java(
+            file,
+            [str(i), str(number_of_experiments), str(total_count), "socket"],
+        )
+        outs.append([int(i), out.strip().split("\n")[-1]])
+    return merge_outs_in_1_file(outs)
+
+
+def merge_outs_in_1_file(outs):
+    with open(dir_out / "merged_out.txt", "w") as f:
+        for i, out in outs:
+            with open(out) as f2:
+                if i == 1:
+                    # write header
+                    f.write(f2.readline())
+                    f2.readline()
+                    f.write(f"{i}-------------------\n")
+                    f.write(f2.read())
+                else:  # dont write header
+                    f2.readline()
+                    f.write(f"{i}-------------------\n")
+                    f.write(f2.read())
+    # remove outs file and rename merged_out.txt outs[-1]
+    for i, out in outs:
+        pathlib.Path(out).unlink()
+    (dir_out / "merged_out.txt").rename(outs[-1][1])
+    return outs[-1][1]
+
+
+# print(call_main(5, 10, 1, "pi"))
+# print(call_main_sockets(5, 10, 1))
+
+
+def speedup(out):
+    """
+    each block of n workers is separated by "n-------------------"
+    File is structured as follows:
+    NbProcess	Error	Estimation	Ntot	Time	Total
+    1-------------------
+    xxx		xxx		xxx		xxx		xxx		xxx
+    xxx		xxx		xxx		xxx		xxx		xxx
+    xxx		xxx		xxx		xxx		xxx		xxx
+    xxx		xxx		xxx		xxx		xxx		xxx
+    2-------------------
+    xxx		xxx		xxx		xxx		xxx		xxx
+    xxx		xxx		xxx		xxx		xxx		xxx
+    xxx		xxx		xxx		xxx		xxx		xxx
+    xxx		xxx		xxx		xxx		xxx		xxx
+    ...
+
+    Return list of speedup for each process (sp = T1/Tp) [[nbP, sP], [nbP+1, sP+1], ...]
+
+    """
+    # search index of "Time" column in header
+    time_index = -1
+    with open(out) as f:
+        data = csv.reader(f, delimiter="\t")
+        header = next(data)
+        time_index = header.index("Time")
+
+    actual = 0
+    actualTimes = []
+    times = []  # [[nbP, meanTime], ...]
+    with open(out) as f:
+        next(f)  # Skip header line
+        for line in f:
+            if "-------------------" in line:
+                if actual != 0:
+                    times.append([actual, np.mean(actualTimes)])
+
+                actual = int(line.split("-")[0])
+                actualTimes = []
+            else:
+                actualTimes.append(float(line.split("\t")[time_index]))
+
+        times.append([actual, np.mean(actualTimes)])
+
+    speedups = [[times[0][0], 1.0]]  # Add the first speedup (1 worker, speedup = 1)
+    for i in range(1, len(times)):
+        speedups.append([times[i][0], times[0][1] / times[i][1]])
+
+    return speedups
+
+
+def perfect_speedup(n):
+    return [[i, i] for i in range(1, n + 1)]
+
+
+def plot_speedups(speedups, title):
+    # plot perfect speedup
+    plt.plot(
+        [x[0] for x in perfect_speedup(speedups[-1][0])],
+        [x[1] for x in perfect_speedup(speedups[-1][0])],
+        label="Perfect speedup",
+    )
+
+    # plot speedup
+    plt.plot([x[0] for x in speedups], [x[1] for x in speedups])
+
+    # labels
+    plt.xlabel("Number of workers")
+    plt.ylabel("Speedup")
+
+    # grid
+    plt.grid()
+    plt.axis("equal")
+    plt.xlim(1, speedups[-1][0])
+    plt.ylim(1, speedups[-1][0])
+
+    # ticks
+    plt.yticks(range(1, speedups[-1][0] + 1))
+    plt.xticks(range(1, speedups[-1][0] + 1))
+
+    # title
+    plt.title(title)
+    plt.legend()
+    plt.show()
+
+
+pi = call_main(8, 10, 100000000, "pi")
+piSpeedups = speedup(pi)
+
+print(piSpeedups)
+
+plot_speedups(speedup(pi), "Speedup Pi.java")
+
+sockets = call_main_sockets(8, 10, 100000000)
+socketsSpeedups = speedup(sockets)
+print(socketsSpeedups)
+
+plot_speedups(socketsSpeedups, "Speedup Sockets")
