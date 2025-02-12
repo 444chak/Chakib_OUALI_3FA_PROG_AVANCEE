@@ -3,7 +3,7 @@ package MONTE_CARLO.Assignment102;
 public class Main {
 
     public static void main(String[] args) {
-        PiMonteCarlo PiVal = new PiMonteCarlo(10000000);
+        PiMonteCarlo PiVal = new PiMonteCarlo(10000000, 1);
         long startTime = System.currentTimeMillis();
         double value = PiVal.getPi();
         long stopTime = System.currentTimeMillis();

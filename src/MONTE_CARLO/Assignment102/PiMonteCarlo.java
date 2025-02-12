@@ -11,15 +11,16 @@ public class PiMonteCarlo {
     AtomicInteger nAtomSuccess;
     int nThrows;
     double value;
+    int nProcessors;
 
-    public PiMonteCarlo(int i) {
+    public PiMonteCarlo(int i, int workers) {
         this.nAtomSuccess = new AtomicInteger(0);
         this.nThrows = i;
         this.value = 0;
+        this.nProcessors = workers;
     }
 
     public double getPi() {
-        int nProcessors = Runtime.getRuntime().availableProcessors();
         ExecutorService executor = Executors.newWorkStealingPool(nProcessors);
         for (int i = 1; i <= nThrows; i++) {
             MonteCarlo worker = new MonteCarlo();
@@ -30,6 +31,10 @@ public class PiMonteCarlo {
         while (!executor.isTerminated()) {
         }
         value = 4.0 * nAtomSuccess.get() / nThrows;
+        System.out.println("Approx value:" + value);
+        System.out.println("Nombre de workers: " + nProcessors);
+        System.out.println("nThrows" + nThrows);
+        
         return value;
     }
 

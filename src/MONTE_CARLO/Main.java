@@ -11,11 +11,13 @@ public class Main {
         int workers;
         int numberOfRuns;
         int totalCount;
+        String algo = "";
 
         if (args.length > 0) {
             workers = Integer.parseInt(args[0]);
             numberOfRuns = Integer.parseInt(args[1]);
-            totalCount = Integer.parseInt(args[2]) / workers;
+            totalCount = Integer.parseInt(args[2]);
+            algo = args[3];
 
         } else {
             workers = 1;
@@ -23,15 +25,12 @@ public class Main {
             totalCount = 120000000;
         }
 
-        Boolean assignment102 = false;
-        Boolean pi = true;
-
         // Assignment 102
-        if (assignment102) {
-            runAssignment102(numberOfRuns, totalCount, machineName);
+        if (algo.equals("ass102")) {
+            runAssignment102(numberOfRuns, totalCount, machineName, workers);
         }
-        if (pi) {
-            runPi(numberOfRuns, totalCount, machineName, workers);
+        if (algo.equals("pi")) {
+            runPi(numberOfRuns, totalCount / workers, machineName, workers);
         }
 
     }
@@ -51,14 +50,14 @@ public class Main {
         System.out.println(fileWriterUtil.getFilePath());
     }
 
-    private static void runAssignment102(int numberOfRuns, int totalCount, String machineName) {
+    private static void runAssignment102(int numberOfRuns, int totalCount, String machineName, int workers) throws Exception {
         System.out.println("--------Assignment 102--------");
         // define file 
         FileWriterUtil fileWriterUtilAssignment102 = new FileWriterUtil("Assignment102", machineName);
 
         for (int i = 0; i < numberOfRuns; i++) {
             // Run program
-            PiMonteCarlo PiVal = new PiMonteCarlo(totalCount);
+            PiMonteCarlo PiVal = new PiMonteCarlo(totalCount, workers);
             long startTime = System.currentTimeMillis();
             PiVal.getPi();
             long stopTime = System.currentTimeMillis();

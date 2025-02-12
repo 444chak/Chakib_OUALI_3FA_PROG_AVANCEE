@@ -14,8 +14,9 @@ path = path / "MONTE_CARLO"
 dir_out = pathlib.Path(__file__).parent.absolute() / "MONTE_CARLO" / "out"
 
 
-def run_java(workers, number_of_experiments, total_count, faible=False):
+def run_java(workers, number_of_experiments, total_count, faible=False, ass102=False):
     file = path / "Main.java"
+    algo = "pi" if not ass102 else "ass102"
     result = subprocess.run(
         [
             "java",
@@ -23,6 +24,7 @@ def run_java(workers, number_of_experiments, total_count, faible=False):
             str(workers),
             str(number_of_experiments),
             str(total_count * workers if faible else total_count),
+            str(algo),
         ],
         stdout=subprocess.PIPE,
     )
@@ -33,13 +35,15 @@ def run_java(workers, number_of_experiments, total_count, faible=False):
 nb_workers = [1, 2, 3, 4, 5, 6, 8]
 
 
-def scalabilite(nb_workers, nb_experiments=10, total_count=1200000, faible=False):
+def scalabilite(
+    nb_workers, nb_experiments=10, total_count=1200000, faible=False, ass102=False
+):
     speedup_times = []
     for i in nb_workers:
         print(
             "Running Master-Worker with ", i, " workers", "| Total count: ", total_count
         )
-        out = run_java(i, nb_experiments, total_count, faible)
+        out = run_java(i, nb_experiments, total_count, faible, ass102)
 
         print(out.strip().split("\n")[-1])
 
@@ -71,11 +75,11 @@ def plot_scalabilite(
     sP2 = list(map(lambda x: speedup2[0] / x, speedup2)) if speedup2 else None
     sP3 = list(map(lambda x: speedup3[0] / x, speedup3)) if speedup3 else None
 
-    plt.plot(nb_workers, sP, label="Speedup", marker="o")
+    plt.plot(nb_workers, sP, label="Speedup Sockets", marker="o")
     if speedup2:
-        plt.plot(nb_workers, sP2, label="Speedup (2)", marker="o")
+        plt.plot(nb_workers, sP2, label="Speedup Pi.java", marker="o")
     if speedup3:
-        plt.plot(nb_workers, sP3, label="Speedup (3)", marker="o")
+        plt.plot(nb_workers, sP3, label="Speedup Ass102.java", marker="o")
     plt.xlabel("Number of workers")
     plt.ylabel("Speedup")
     title = faible and "Scalabilité faible" or "Scalabilité forte"
@@ -183,4 +187,5 @@ if __name__ == "__main__":
 
     sp_sockets = scalabilite_sockets(nb_workers, total_count=120000000)
     sp_normal = scalabilite(nb_workers, total_count=120000000)
-    plot_scalabilite(nb_workers, sp_normal, sp_sockets)
+    sp_ass102 = scalabilite(nb_workers, total_count=120000000, ass102=True)
+    plot_scalabilite(nb_workers, sp_normal, sp_sockets, sp_ass102)
