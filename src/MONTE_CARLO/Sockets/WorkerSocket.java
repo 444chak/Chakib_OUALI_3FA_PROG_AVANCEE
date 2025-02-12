@@ -38,7 +38,9 @@ public class WorkerSocket {
         String str;
         while (isRunning) {
             str = bRead.readLine(); // read message from Master
-            if (!(str.equals("END"))) {
+            if (str == null || str.equals("END")) {
+                isRunning = false;
+            } else {
                 System.out.println("Server receives totalCount = " + str);
                 int numIterations = Integer.parseInt(str);
                 Master master = new Master();
@@ -46,13 +48,11 @@ public class WorkerSocket {
                 Result result = master.doRun(numIterations / numWorkers, numWorkers, false);
                 long circleCount = result.getTotal();
                 pWrite.println(circleCount);
-
-            } else {
-                isRunning = false;
             }
         }
         bRead.close();
         pWrite.close();
         soc.close();
+        s.close();
     }
 }
