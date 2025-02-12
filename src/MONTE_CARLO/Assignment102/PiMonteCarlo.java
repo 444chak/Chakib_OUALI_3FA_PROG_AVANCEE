@@ -34,7 +34,7 @@ public class PiMonteCarlo {
         System.out.println("Approx value:" + value);
         System.out.println("Nombre de workers: " + nProcessors);
         System.out.println("nThrows" + nThrows);
-        
+
         return value;
     }
 
@@ -43,7 +43,7 @@ public class PiMonteCarlo {
         int ntot = nThrows;
         int nbProcess = Runtime.getRuntime().availableProcessors();
         long time = 0;
-        Result result = new Result(nAtomSuccess.get(), error, value, ntot, nbProcess, time);
+        Result result = new Result(nAtomSuccess.get(), error, value, ntot, nProcessors, time);
         return result;
     }
 }
