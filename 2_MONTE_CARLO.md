@@ -4,6 +4,28 @@ Chakib OUALI - 3FA - 2024
 
 ---
 
+## Table des matières
+
+- [Rapport - Calcul de $\\pi$ par la méthode de Monte Carlo - Programmation Avancée](#rapport---calcul-de-pi-par-la-méthode-de-monte-carlo---programmation-avancée)
+  - [Table des matières](#table-des-matières)
+  - [Introduction](#introduction)
+  - [Principe de la méthode de Monte Carlo](#principe-de-la-méthode-de-monte-carlo)
+    - [Généralités](#généralités)
+    - [Parallélisme](#parallélisme)
+  - [Implémentation](#implémentation)
+  - [Analyse des sources \& Réorganisation](#analyse-des-sources--réorganisation)
+    - [*Assignment102*](#assignment102)
+    - [*Pi*](#pi)
+      - [Main](#main)
+      - [Master](#master)
+      - [Worker](#worker)
+  - [Utilisations de sockets](#utilisations-de-sockets)
+    - [Analyse des sources](#analyse-des-sources)
+      - [MasterSocket](#mastersocket)
+      - [WorkerSocket](#workersocket)
+
+---
+
 ## Introduction
 
 Ce rapport présente l'implémentation et l'analyse de la méthode de Monte Carlo pour estimer la valeur de $\pi$. La méthode de Monte Carlo est une technique de simulation qui utilise des nombres aléatoires pour résoudre des problèmes mathématiques ou physiques. Dans ce cas, nous utilisons cette méthode pour estimer la valeur de $\pi$ en générant des points aléatoires dans un carré et en comptant combien de ces points tombent à l'intérieur d'un cercle inscrit dans ce carré.
@@ -27,29 +49,30 @@ Avec
 - $d_{p}$ : la distance entre le point aléatoire et le centre du cercle
   - c'est à dire $\sqrt{x_{p}^2 + y_{p}^2}$ avec $x_{p}$ et $y_{p}$ les coordonnées du point aléatoire
 
-On peut illustrer ce problème avec un tel graphique :  
+On peut illustrer ce problème avec un tel graphique :
 
-![Figure 1](assets/f1_monte_carlo.png)
+<img src="assets/f1_monte_carlo.png" alt="Figure 1 : Illustration de la méthode de Monte Carlo pour estimer $\pi$" width="500">
+
 *Figure 1 : Illustration de la méthode de Monte Carlo pour estimer $\pi$*
 
-- L'équation de la courbe (cercle) est $x^2 + y^2 = 1$.  
-- On place aléatoirement des points dans le carré de côté 1, et on compte combien de ces points tombent à l'intérieur du cercle.  
+- L'équation de la courbe (cercle) est $x^2 + y^2 = 1$.
+- On place aléatoirement des points dans le carré de côté 1, et on compte combien de ces points tombent à l'intérieur du cercle.
 
 D'un point de vue algorithmique, on peut résumer la méthode de Monte Carlo pour estimer $\pi$ comme suit :
 
 ```pseudo
 nombre_de_points_dans_le_cercle = 0
 nombre_de_points_total = 0
-nombre_de_points_total_max = 1000000 
+nombre_de_points_total_max = 1000000
 
 tant que nombre_de_points_total < nombre_de_points_total_max:
     x = random(0, 1)
     y = random(0, 1)
     distance = sqrt(x^2 + y^2)
-    
+
     si distance < 1:
         nombre_de_points_dans_le_cercle += 1
-    
+
     nombre_de_points_total += 1
 fin tant que
 
@@ -58,7 +81,7 @@ pi_estime = 4 * nombre_de_points_dans_le_cercle / nombre_de_points_total
 
 ### Parallélisme
 
-Pour accélérer le calcul de $\pi$ par la méthode de Monte Carlo, on peut paralléliser le calcul.  
+Pour accélérer le calcul de $\pi$ par la méthode de Monte Carlo, on peut paralléliser le calcul.
 Le modèle de parallélisme choisi est la parallélisation par tâches.
 
 Les tâches dans notre algorithmes sont les suivantes :
@@ -137,7 +160,7 @@ La méthode de Monte Carlo est implémentée en Java à partir de deux projets d
 
 Ci-après, le diagramme UML des classes *Assignment102* après réorganisation :
 
-![UML Assignment102](assets/Assignment102UML.jpg)
+<img src="assets/Assignment102UML.jpg" alt="UML Assignment102" width="1000">
 
 ### *Pi*
 
