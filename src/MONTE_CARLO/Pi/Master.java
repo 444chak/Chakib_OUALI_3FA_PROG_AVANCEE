@@ -41,7 +41,7 @@ public class Master {
             // until result from corresponding worker is ready.
             total += f.get();
         }
-        double pi = 4.0 * total / totalCount / numWorkers;
+        double pi = 4.0 * total / totalCount;
 
         long stopTime = System.currentTimeMillis();
 
@@ -59,7 +59,7 @@ public class Master {
         exec.shutdown();
         double error = (Math.abs((pi - Math.PI)) / Math.PI);
         double estimation = pi;
-        int ntot = totalCount * numWorkers;
+        int ntot = totalCount;
         int nbProcess = numWorkers;
         long time = stopTime - startTime;
         Result result = new Result(total, error, estimation, ntot, nbProcess, time);
