@@ -93,7 +93,7 @@ public class Main {
         for (int i = 0; i < currentWorkers; i++) {
             int port = 25545 + i;
             System.out.println("Starting WorkerSocket on port " + port);
-            Thread.sleep(100);
+            Thread.sleep(250);
             new Thread(() -> {
                 try {
                     WorkerSocket.main(new String[]{String.valueOf(port)});
@@ -106,7 +106,7 @@ public class Main {
         }
 
         // Give some time for workers to start
-        Thread.sleep(100);
+        Thread.sleep(250);
 
         // Start MasterSocket with current number of workers
         String[] masterParams = new String[3 + currentWorkers]; // Adjust size
