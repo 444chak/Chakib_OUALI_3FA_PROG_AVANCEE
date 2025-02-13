@@ -13,6 +13,9 @@ Chakib OUALI - 3FA - 2024
     - [Généralités](#généralités)
     - [Parallélisme](#parallélisme)
   - [Implémentation](#implémentation)
+  - [Paradigmes de programmation utilisés](#paradigmes-de-programmation-utilisés)
+    - [Parallélisme de boucle, itération parallèle](#parallélisme-de-boucle-itération-parallèle)
+    - [Modèle master-worker](#modèle-master-worker)
   - [Analyse des sources \& Réorganisation](#analyse-des-sources--réorganisation)
     - [*Assignment102*](#assignment102)
     - [*Pi*](#pi)
@@ -23,6 +26,7 @@ Chakib OUALI - 3FA - 2024
     - [Analyse des sources](#analyse-des-sources)
       - [MasterSocket](#mastersocket)
       - [WorkerSocket](#workersocket)
+  - [Automatisation de l'exécution des différents programmes](#automatisation-de-lexécution-des-différents-programmes)
 
 ---
 
@@ -144,6 +148,16 @@ Ici, chaque thread est responsable de générer un certain nombre de points alé
 
 La méthode de Monte Carlo est implémentée en Java à partir de deux projets différents. Une, nommée *Assignment102*, développée par Karthik Jain (TODO:Source), et l'autre, *Pi*, développée par le Dr. Steve Kautz de l'IOWA State University (TODO:Source). Ces deux projets utilisent des threads pour exécuter les tâches Monte Carlo en parallèle et calculer la valeur de $\pi$ en fonction des résultats obtenus.
 
+## Paradigmes de programmation utilisés
+
+### Parallélisme de boucle, itération parallèle
+
+Le parallélisme de boucle est un paradigme de programmation parallèle qui consiste à exécuter plusieurs itérations d'une boucle en parallèle. Dans le cas de la méthode de Monte Carlo, chaque itération de la boucle consiste à générer un point aléatoire et à vérifier s'il tombe à l'intérieur du cercle. En parallélisant ces itérations, on peut accélérer le calcul de $\pi$.
+
+### Modèle master-worker
+
+Le modèle master-worker est un modèle de programmation parallèle dans lequel un processus maître distribue des tâches à des processus esclaves (ou workers) pour maximiser l'utilisation des ressources disponibles. Dans le cas de la méthode de Monte Carlo, le processus maître est responsable de diviser le travail en tâches et de les distribuer aux workers pour effectuer les calculs. Le processus maître agrège ensuite les résultats des workers pour obtenir une estimation de $\pi$.
+
 ## Analyse des sources & Réorganisation
 
 ### *Assignment102*
@@ -180,6 +194,10 @@ Le code source de *Pi* est également organisé en trois classes : `Pi`, `Master
 
 `Worker.java` contient la classe `Worker` qui effectue les calculs de Monte Carlo pour estimer la valeur de $\pi$. Cette classe implémente l'interface `Callable` pour renvoyer un résultat.
 
+Ce programme suit le paradigme master-worker pour paralléliser le calcul de $\pi$ par la méthode de Monte Carlo. Le maître initialise les workers, leur envoie les tâches à effectuer et agrège les résultats pour obtenir une estimation de $\pi$. Dans le code, le maître est représenté par la classe `Master` et les workers par la classe `Worker`.
+
+TODO : UML
+
 ## Utilisations de sockets
 
 ### Analyse des sources
@@ -188,18 +206,76 @@ Le code source dédié à la programmation à mémoire distribuée utilise des s
 
 #### MasterSocket
 
-Dans un premier temps, on initialise un nombre de workers avec leurs ports respectifs. Pour chaque worker, on crée un socket et on envoie le nombre d'itérations à effectuer pour le calcul de $\pi$. Ensuite, on attend les résultats de chaque worker et on les agrège pour obtenir une estimation de $\pi`.
-
-TODO : Rajouter UML
+Dans un premier temps, on initialise un nombre de workers avec leurs ports respectifs. Pour chaque worker, on crée un socket et on envoie le nombre d'itérations à effectuer pour le calcul de $\pi$. Ensuite, on attend les résultats de chaque worker et on les agrège pour obtenir une estimation de $\pi$.
 
 #### WorkerSocket
 
-Chaque worker crée un socket pour recevoir le nombre d'itérations à effectuer pour le calcul de $\pi`. Pour l'instant le worker n'effectue pas le calcul de Pi.
+Chaque worker crée un socket pour recevoir le nombre d'itérations à effectuer pour le calcul de $\pi$. Pour l'instant le worker n'effectue pas le calcul de Pi.
+
+Pour compléter le programme, il faudrait ajouter la méthode de Monte Carlo pour le calcul de $\pi$ dans la classe `WorkerSocket`. Pour cela, on utilise le code de la `Pi` pour calculer la valeur de $\pi$. On envoie ensuite le résultat au maître pour l'agrégation.
 
 TODO : Rajouter UML
 
----
-
 Pour lancer le programme, il faut exécuter nos WorkerSocket avec les ports correspondants, puis exécuter le MasterSocket avec les ports des workers définit précédemment.
+
+## Automatisation de l'exécution des différents programmes
+
+Pour automatiser l'exécution des différents programmes *Assignment102*, *Pi* et *PiSocket*, il a fallu créer une classe main sous cette forme :
+
+```java
+...
+ public static void main(String[] args) throws Exception {
+
+  int workers;
+  int numberOfRuns;
+  int totalCount;
+  String algo = "";
+
+  if (args.length > 0) {
+      workers = Integer.parseInt(args[0]);
+      numberOfRuns = Integer.parseInt(args[1]);
+      totalCount = Integer.parseInt(args[2]);
+      algo = args[3];
+
+  } else {
+      workers = 5;
+      numberOfRuns = 10;
+      totalCount = 10000000;
+      algo = "pi";
+  }
+
+  // Assignment 102
+  if (algo.equals("ass102")) {
+      runAssignment102(numberOfRuns, totalCount, machineName, workers);
+  }
+  if (algo.equals("pi")) {
+      runPi(numberOfRuns, totalCount, machineName, workers);
+  }
+  if (algo.equals("socket")) {
+      runMasterWorkerSocket(workers, totalCount, numberOfRuns);
+  }
+}
+```
+
+L'objectif étant de lancer le programme avec les paramètres qui nous intéressent. Par exemple, pour lancer le programme *Assignment102* avec 5 workers, 10 runs et 10000000 itérations, on exécute la commande suivante :
+
+```bash
+java Main 5 10 10000000 ass102
+```
+
+Pour prévoir les tests des différents algorithmes et l'analyse de performance, on a ajouté une classe permettant d'inscrire les résultats dans un fichier. Il s'agit de la classe `FileWriterUtil`. Cette classe créer un fichier dans le répertoire `out` avec en paramètre un objet `Result`. Ces fichiers sont créés dans notre classe `Main` après chaque exécution des algorithmes.
+
+Un fichier de résultat se présente sous cette forme :
+
+```txt
+NbProcess Error Estimation Ntot Time Total
+1-------------------
+1 2.2557144351084918E-4 3.140884 1000000 58 785221
+1 3.664849447910635E-4 3.142744 1000000 23 785686
+...
+2-------------------
+2 0.0010463948616796842 3.14488 1000000 9 786220
+...
+```
 
 TODO : Sources, crédits
