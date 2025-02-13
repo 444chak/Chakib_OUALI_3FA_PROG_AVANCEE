@@ -130,8 +130,22 @@ def perfect_speedup(n):
     return [[i, i] for i in range(1, n + 1)]
 
 
-def speedup_curve(speedups, label):
-    return ([x[0] for x in speedups], [x[1] for x in speedups]), "-", label, "x"
+def speedup_curve(speedups, label, linestyle="-", marker="x"):
+    return (
+        ([x[0] for x in speedups], [x[1] for x in speedups]),
+        linestyle,
+        label,
+        marker,
+    )
+
+
+def plot_curve(speedup_curve):
+    plt.plot(
+        *speedup_curve[0],
+        speedup_curve[1],
+        label=speedup_curve[2],
+        marker=speedup_curve[3],
+    )
 
 
 def plot_speedups(max_workers, title):
@@ -139,8 +153,9 @@ def plot_speedups(max_workers, title):
     plt.plot(
         [x[0] for x in perfect_speedup(max_workers)],
         [x[1] for x in perfect_speedup(max_workers)],
-        "--",
+        ":",
         label="Perfect speedup",
+        c="black",
     )
 
     # labels
@@ -169,6 +184,32 @@ def plot_speedups(max_workers, title):
     plt.show()
 
 
+############################ 10^8 points ############################
+
+# pi = call_main(16, 10, 100000000, "pi")
+# ass102 = call_main(8, 10, 100000000, "ass102")
+# piSocket = call_main_sockets(16, 10, 100000000)
+
+pi = dir_out / "F_16W_10E8_Pi_CHAK-DESKTOP.txt"
+# ass102 = dir_out / "F_8W_10E8_Assignment102_CHAK-DESKTOP.txt"
+piSocket = dir_out / "F_16W_10E8_PiSocket_CHAK-DESKTOP.txt"
+
+speedupCurvePi = speedup_curve(
+    speedup(pi), "16 workers, 10^8 points, Pi, CHAK-DESKTOP", "-."
+)
+# speedupCurveAss102 = speedup_curve(
+#     speedup(ass102), "8 workers, 10^8 points, Assignment102, CHAK-DESKTOP"
+# )
+speedupCurvePiSocket = speedup_curve(
+    speedup(piSocket), "16 workers, 10^8 points, PiSocket, CHAK-DESKTOP", "-."
+)
+
+for curve in [speedupCurvePi, speedupCurvePiSocket]:
+    plot_curve(curve)
+
+
+############################ 10^7 points ############################
+
 # pi = call_main(16, 10, 100000000, "pi")
 # ass102 = call_main(16, 10, 100000000, "ass102")
 # piSocket = call_main_sockets(16, 10, 100000000)
@@ -185,23 +226,29 @@ speedupCurvePiSocket = speedup_curve(
     speedup(piSocket), "16 workers, 10^7 points, PiSocket, CHAK-DESKTOP"
 )
 
-plt.plot(
-    *speedupCurvePi[0],
-    speedupCurvePi[1],
-    label=speedupCurvePi[2],
-    marker=speedupCurvePi[3],
+for curve in [speedupCurvePi, speedupCurveAss102, speedupCurvePiSocket]:
+    plot_curve(curve)
+
+############################ 10^6 points ############################
+
+# pi = call_main(16, 10, 1000000, "pi")
+# ass102 = call_main(10, 10, 1000000, "ass102")
+# piSocket = call_main_sockets(16, 10, 1000000)
+
+pi = dir_out / "F_16W_10E6_Pi_CHAK-DESKTOP.txt"
+ass102 = dir_out / "F_10W_10E6_Assignment102_CHAK-DESKTOP.txt"
+piSocket = dir_out / "F_16W_10E6_PiSocket_CHAK-DESKTOP.txt"
+
+speedupCurvePi = speedup_curve(speedup(pi), "16 workers, 10^6 points, Pi", "--")
+speedupCurveAss102 = speedup_curve(
+    speedup(ass102), "10 workers, 10^6 points, Assignment102", "--"
 )
-plt.plot(
-    *speedupCurveAss102[0],
-    speedupCurveAss102[1],
-    label=speedupCurveAss102[2],
-    marker=speedupCurveAss102[3],
+speedupCurvePiSocket = speedup_curve(
+    speedup(piSocket), "16 workers, 10^6 points, PiSocket", "--"
 )
-plt.plot(
-    *speedupCurvePiSocket[0],
-    speedupCurvePiSocket[1],
-    label=speedupCurvePiSocket[2],
-    marker=speedupCurvePiSocket[3],
-)
+
+for curve in [speedupCurvePi, speedupCurveAss102, speedupCurvePiSocket]:
+    plot_curve(curve)
+
 
 plot_speedups(16, "Speedup Curve")
