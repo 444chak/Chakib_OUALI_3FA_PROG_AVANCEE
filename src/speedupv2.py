@@ -3,7 +3,6 @@ import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
 import csv
-import time
 
 path = pathlib.Path(__file__).parent.absolute()
 path = path / "MONTE_CARLO"
@@ -131,16 +130,18 @@ def perfect_speedup(n):
     return [[i, i] for i in range(1, n + 1)]
 
 
-def plot_speedups(speedups, title):
+def speedup_curve(speedups, label):
+    return ([x[0] for x in speedups], [x[1] for x in speedups]), "-", label, "x"
+
+
+def plot_speedups(max_workers, title):
     # plot perfect speedup
     plt.plot(
-        [x[0] for x in perfect_speedup(speedups[-1][0])],
-        [x[1] for x in perfect_speedup(speedups[-1][0])],
+        [x[0] for x in perfect_speedup(max_workers)],
+        [x[1] for x in perfect_speedup(max_workers)],
+        "--",
         label="Perfect speedup",
     )
-
-    # plot speedup
-    plt.plot([x[0] for x in speedups], [x[1] for x in speedups])
 
     # labels
     plt.xlabel("Number of workers")
@@ -149,12 +150,18 @@ def plot_speedups(speedups, title):
     # grid
     plt.grid()
     plt.axis("equal")
-    plt.xlim(1, speedups[-1][0])
-    plt.ylim(1, speedups[-1][0])
+    plt.xlim(0, max_workers + 0.5)
+    plt.ylim(0, max_workers + 0.5)
+
+    # square grid
+    plt.gca().set_aspect("equal", adjustable="box")
+
+    # window size
+    plt.gcf().set_size_inches(8, 8)
 
     # ticks
-    plt.yticks(range(1, speedups[-1][0] + 1))
-    plt.xticks(range(1, speedups[-1][0] + 1))
+    plt.yticks(range(1, max_workers + 1))
+    plt.xticks(range(1, max_workers + 1))
 
     # title
     plt.title(title)
@@ -162,15 +169,39 @@ def plot_speedups(speedups, title):
     plt.show()
 
 
-pi = call_main(8, 10, 100000000, "pi")
-piSpeedups = speedup(pi)
+# pi = call_main(16, 10, 100000000, "pi")
+# ass102 = call_main(16, 10, 100000000, "ass102")
+# piSocket = call_main_sockets(16, 10, 100000000)
 
-print(piSpeedups)
+pi = dir_out / "F_16W_10E7_Pi_CHAK-DESKTOP.txt"
+ass102 = dir_out / "F_8W_10E7_Assignment102_CHAK-DESKTOP.txt"
+piSocket = dir_out / "F_16W_10E7_PiSocket_CHAK-DESKTOP.txt"
 
-plot_speedups(speedup(pi), "Speedup Pi.java")
+speedupCurvePi = speedup_curve(speedup(pi), "16 workers, 10^7 points, Pi, CHAK-DESKTOP")
+speedupCurveAss102 = speedup_curve(
+    speedup(ass102), "8 workers, 10^7 points, Assignment102, CHAK-DESKTOP"
+)
+speedupCurvePiSocket = speedup_curve(
+    speedup(piSocket), "16 workers, 10^7 points, PiSocket, CHAK-DESKTOP"
+)
 
-sockets = call_main_sockets(8, 10, 100000000)
-socketsSpeedups = speedup(sockets)
-print(socketsSpeedups)
+plt.plot(
+    *speedupCurvePi[0],
+    speedupCurvePi[1],
+    label=speedupCurvePi[2],
+    marker=speedupCurvePi[3],
+)
+plt.plot(
+    *speedupCurveAss102[0],
+    speedupCurveAss102[1],
+    label=speedupCurveAss102[2],
+    marker=speedupCurveAss102[3],
+)
+plt.plot(
+    *speedupCurvePiSocket[0],
+    speedupCurvePiSocket[1],
+    label=speedupCurvePiSocket[2],
+    marker=speedupCurvePiSocket[3],
+)
 
-plot_speedups(socketsSpeedups, "Speedup Sockets")
+plot_speedups(16, "Speedup Curve")
