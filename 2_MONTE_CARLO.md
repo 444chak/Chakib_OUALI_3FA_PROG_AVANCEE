@@ -27,6 +27,8 @@ Chakib OUALI - 3FA - 2024
       - [MasterSocket](#mastersocket)
       - [WorkerSocket](#workersocket)
   - [Automatisation de l'exécution des différents programmes](#automatisation-de-lexécution-des-différents-programmes)
+  - [Analyse de temps d'exécution](#analyse-de-temps-dexécution)
+    - [Définition de scalabilité faible et forte](#définition-de-scalabilité-faible-et-forte)
 
 ---
 
@@ -277,5 +279,33 @@ NbProcess Error Estimation Ntot Time Total
 2 0.0010463948616796842 3.14488 1000000 9 786220
 ...
 ```
+
+## Analyse de temps d'exécution
+
+### Définition de scalabilité faible et forte
+
+La scalabilité est la capacité d'un système à s'adapter à une charge de travail croissante ou à augmenter le nombre de ressources pour améliorer les performances. On distingue deux types de scalabilité :
+
+- La scalabilité forte : la capacité d'un système à maintenir un niveau de performance constant lorsqu'on augmente le nombre de ressources (par exemple, le nombre de processeurs).
+- La scalabilité faible : la capacité d'un système à maintenir un niveau de performance constant lorsqu'on augmente la charge de travail (par exemple, le nombre de tâches à effectuer).
+
+Pour mesurer la scalabilité, on utilise le speedup, qui est le rapport entre le temps d'exécution d'un programme sur un seul processeur et le temps d'exécution du même programme sur plusieurs processeurs. On peut calculer le speedup comme suit :
+
+$$
+Speedup = \frac{T_{1}}{T_{n}}
+$$
+
+où :
+
+- $T_{1}$ est le temps d'exécution du programme sur un seul processeur.
+- $T_{n}$ est le temps d'exécution du programme sur $n$ processeurs.
+
+Le speedup idéal est linéaire, c'est-à-dire que le speedup est égal au nombre de processeurs utilisés. Cependant, en pratique, le speedup est souvent inférieur au nombre de processeurs en raison des surcharges de communication et de synchronisation entre les processeurs (overhead).
+
+<img src="assets/f2_perfect_speedup.png" alt="Speedup" width="500">
+
+*Figure 2 : Speedup idéal*
+
+Dans cette figure la droite noire correspond le speedup idéal dans le cas de la scalabilité forte. La droite bleue correspond quant à elle à la scalabilité faible.
 
 TODO : Sources, crédits
