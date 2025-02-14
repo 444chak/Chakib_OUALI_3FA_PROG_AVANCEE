@@ -20,14 +20,18 @@ public class Master {
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    public Result doRun(int totalCount, int numWorkers, Boolean print) throws InterruptedException, ExecutionException {
+    public Result doRun(int totalCount, int numWorkers, Boolean print, boolean scalaFaible) throws InterruptedException, ExecutionException {
 
         long startTime = System.currentTimeMillis();
 
         // Create a collection of tasks
         List<Callable<Long>> tasks = new ArrayList<>();
         for (int i = 0; i < numWorkers; ++i) {
-            tasks.add(new Worker(totalCount / numWorkers));
+            if (scalaFaible) {
+                tasks.add(new Worker(totalCount));
+            } else {
+                tasks.add(new Worker(totalCount / numWorkers));
+            }
         }
 
         // Run them and receive a collection of Futures
@@ -41,7 +45,11 @@ public class Master {
             // until result from corresponding worker is ready.
             total += f.get();
         }
+
         double pi = 4.0 * total / totalCount;
+        if (scalaFaible) {
+            pi = pi / numWorkers;
+        }
 
         long stopTime = System.currentTimeMillis();
 
