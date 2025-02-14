@@ -14,12 +14,16 @@ public class Main {
         int numberOfRuns;
         int totalCount;
         String algo = "";
+        boolean scalaFaible = false;
 
         if (args.length > 0) {
             workers = Integer.parseInt(args[0]);
             numberOfRuns = Integer.parseInt(args[1]);
             totalCount = Integer.parseInt(args[2]);
             algo = args[3];
+            if (args.length > 4) {
+                scalaFaible = Boolean.parseBoolean(args[4]);
+            }
 
         } else {
             workers = 5;
@@ -30,18 +34,18 @@ public class Main {
 
         // Assignment 102
         if (algo.equals("ass102")) {
-            runAssignment102(numberOfRuns, totalCount, machineName, workers);
+            runAssignment102(numberOfRuns, totalCount, machineName, workers, scalaFaible);
         }
         if (algo.equals("pi")) {
-            runPi(numberOfRuns, totalCount, machineName, workers);
+            runPi(numberOfRuns, totalCount, machineName, workers, scalaFaible);
         }
         if (algo.equals("socket")) {
-            runMasterWorkerSocket(workers, totalCount, numberOfRuns);
+            runMasterWorkerSocket(workers, totalCount, numberOfRuns, scalaFaible);
         }
 
     }
 
-    private static void runPi(int numberOfRuns, int totalCount, String machineName, int workers) throws Exception {
+    private static void runPi(int numberOfRuns, int totalCount, String machineName, int workers, boolean scalaFaible) throws Exception {
         System.out.println("\n--------Pi--------");
         // define file
         FileWriterUtil fileWriterUtil = new FileWriterUtil("Pi", machineName);
@@ -51,7 +55,7 @@ public class Main {
             for (int i = 0; i < numberOfRuns; i++) {
                 // Run program
                 Result result;
-                result = new Master().doRun(totalCount, j, false);
+                result = new Master().doRun(totalCount, j, false, scalaFaible);
                 fileWriterUtil.writeToFile(result);
             }
         }
@@ -59,7 +63,7 @@ public class Main {
         System.out.println(fileWriterUtil.getFilePath());
     }
 
-    private static void runAssignment102(int numberOfRuns, int totalCount, String machineName, int workers) throws Exception {
+    private static void runAssignment102(int numberOfRuns, int totalCount, String machineName, int workers, boolean scalaFaible) throws Exception {
         System.out.println("--------Assignment 102--------");
         // define file 
         FileWriterUtil fileWriterUtilAssignment102 = new FileWriterUtil("Assignment102", machineName);
@@ -83,7 +87,7 @@ public class Main {
         System.out.println(fileWriterUtilAssignment102.getFilePath());
     }
 
-    private static void runMasterWorkerSocket(int currentWorkers, int totalCount, int numberOfRuns) throws Exception {
+    private static void runMasterWorkerSocket(int currentWorkers, int totalCount, int numberOfRuns, boolean scalaFaible) throws Exception {
         System.out.println("--------Master-Worker Socket--------");
 
         // Start WorkerSockets
@@ -109,7 +113,7 @@ public class Main {
         Thread.sleep(250);
 
         // Start MasterSocket with current number of workers
-        String[] masterParams = new String[3 + currentWorkers]; // Adjust size
+        String[] masterParams = new String[3 + currentWorkers + (scalaFaible ? 1 : 0)];
         masterParams[0] = String.valueOf(currentWorkers);
         masterParams[1] = String.valueOf(totalCount);
         masterParams[2] = String.valueOf(numberOfRuns);
@@ -117,6 +121,11 @@ public class Main {
         for (int i = 0; i < currentWorkers; i++) {
             masterParams[i + 3] = String.valueOf(25545 + i); // Pass correct ports
         }
+
+        if (scalaFaible) {
+            masterParams[currentWorkers + 3] = "true";
+        }
+
         MasterSocket.main(masterParams);
 
     }

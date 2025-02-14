@@ -30,21 +30,21 @@ def clean_out_dir():
 # clean_out_dir()
 
 
-def call_main(workers, number_of_experiments, total_count, algo):
+def call_main(workers, number_of_experiments, total_count, algo, *args):
     file = path / "Main.java"
     out = run_java(
-        file, [str(workers), str(number_of_experiments), str(total_count), algo]
+        file, [str(workers), str(number_of_experiments), str(total_count), algo, *args]
     )
     return out.strip().split("\n")[-1]
 
 
-def call_main_sockets(workers, number_of_experiments, total_count):
+def call_main_sockets(workers, number_of_experiments, total_count, *args):
     file = path / "Main.java"
     outs = []
     for i in range(1, workers + 1):
         out = run_java(
             file,
-            [str(i), str(number_of_experiments), str(total_count), "socket"],
+            [str(i), str(number_of_experiments), str(total_count), "socket", *args],
         )
         outs.append([int(i), out.strip().split("\n")[-1]])
     return merge_outs_in_1_file(outs)
@@ -184,71 +184,138 @@ def plot_speedups(max_workers, title):
     plt.show()
 
 
+def plot_weak_scaling(max_workers, title):
+    # plot linear 1 line
+    plt.plot(
+        [x for x in range(1, max_workers + 1)],
+        [1 for x in range(1, max_workers + 1)],
+        ":",
+        label="Perfect speedup",
+    )
+
+    # labels
+    plt.xlabel("Number of workers")
+    plt.ylabel("Speedup")
+
+    # grid
+    plt.grid()
+    plt.xlim(0, max_workers + 0.5)
+    plt.ylim(0, 1.5)
+
+    # window size
+
+    # ticks
+    plt.xticks(range(1, max_workers + 1))
+
+    # title
+    plt.title(title)
+    plt.legend()
+    plt.show()
+
+
 ############################ 10^8 points ############################
 
-# pi = call_main(16, 10, 100000000, "pi")
-# ass102 = call_main(8, 10, 100000000, "ass102")
-# piSocket = call_main_sockets(16, 10, 100000000)
 
-pi = dir_out / "F_16W_10E8_Pi_CHAK-DESKTOP.txt"
-# ass102 = dir_out / "F_8W_10E8_Assignment102_CHAK-DESKTOP.txt"
-piSocket = dir_out / "F_16W_10E8_PiSocket_CHAK-DESKTOP.txt"
+def scalaForte10e8():
+    # pi = call_main(16, 10, 100000000, "pi")
+    # ass102 = call_main(8, 10, 100000000, "ass102")
+    # piSocket = call_main_sockets(16, 10, 100000000)
 
-speedupCurvePi = speedup_curve(
-    speedup(pi), "16 workers, 10^8 points, Pi, CHAK-DESKTOP", "-."
-)
-# speedupCurveAss102 = speedup_curve(
-#     speedup(ass102), "8 workers, 10^8 points, Assignment102, CHAK-DESKTOP"
-# )
-speedupCurvePiSocket = speedup_curve(
-    speedup(piSocket), "16 workers, 10^8 points, PiSocket, CHAK-DESKTOP", "-."
-)
+    pi = dir_out / "F_16W_10E8_Pi_CHAK-DESKTOP.txt"
+    # ass102 = dir_out / "F_8W_10E8_Assignment102_CHAK-DESKTOP.txt"
+    piSocket = dir_out / "F_16W_10E8_PiSocket_CHAK-DESKTOP.txt"
 
-for curve in [speedupCurvePi, speedupCurvePiSocket]:
-    plot_curve(curve)
+    speedupCurvePi = speedup_curve(
+        speedup(pi), "16 workers, 10^8 points, Pi, CHAK-DESKTOP", "-."
+    )
+    # speedupCurveAss102 = speedup_curve(
+    #     speedup(ass102), "8 workers, 10^8 points, Assignment102, CHAK-DESKTOP"
+    # )
+    speedupCurvePiSocket = speedup_curve(
+        speedup(piSocket), "16 workers, 10^8 points, PiSocket, CHAK-DESKTOP", "-."
+    )
+
+    for curve in [speedupCurvePi, speedupCurvePiSocket]:
+        plot_curve(curve)
 
 
 ############################ 10^7 points ############################
+def scalaForte10e7():
+    # pi = call_main(16, 10, 100000000, "pi")
+    # ass102 = call_main(16, 10, 100000000, "ass102")
+    # piSocket = call_main_sockets(16, 10, 100000000)
 
-# pi = call_main(16, 10, 100000000, "pi")
-# ass102 = call_main(16, 10, 100000000, "ass102")
-# piSocket = call_main_sockets(16, 10, 100000000)
+    pi = dir_out / "F_16W_10E7_Pi_CHAK-DESKTOP.txt"
+    ass102 = dir_out / "F_8W_10E7_Assignment102_CHAK-DESKTOP.txt"
+    piSocket = dir_out / "F_16W_10E7_PiSocket_CHAK-DESKTOP.txt"
 
-pi = dir_out / "F_16W_10E7_Pi_CHAK-DESKTOP.txt"
-ass102 = dir_out / "F_8W_10E7_Assignment102_CHAK-DESKTOP.txt"
-piSocket = dir_out / "F_16W_10E7_PiSocket_CHAK-DESKTOP.txt"
+    speedupCurvePi = speedup_curve(
+        speedup(pi), "16 workers, 10^7 points, Pi, CHAK-DESKTOP"
+    )
+    speedupCurveAss102 = speedup_curve(
+        speedup(ass102), "8 workers, 10^7 points, Assignment102, CHAK-DESKTOP"
+    )
+    speedupCurvePiSocket = speedup_curve(
+        speedup(piSocket), "16 workers, 10^7 points, PiSocket, CHAK-DESKTOP"
+    )
 
-speedupCurvePi = speedup_curve(speedup(pi), "16 workers, 10^7 points, Pi, CHAK-DESKTOP")
-speedupCurveAss102 = speedup_curve(
-    speedup(ass102), "8 workers, 10^7 points, Assignment102, CHAK-DESKTOP"
-)
-speedupCurvePiSocket = speedup_curve(
-    speedup(piSocket), "16 workers, 10^7 points, PiSocket, CHAK-DESKTOP"
-)
+    for curve in [speedupCurvePi, speedupCurveAss102, speedupCurvePiSocket]:
+        plot_curve(curve)
 
-for curve in [speedupCurvePi, speedupCurveAss102, speedupCurvePiSocket]:
-    plot_curve(curve)
 
 ############################ 10^6 points ############################
 
-# pi = call_main(16, 10, 1000000, "pi")
-# ass102 = call_main(10, 10, 1000000, "ass102")
-# piSocket = call_main_sockets(16, 10, 1000000)
 
-pi = dir_out / "F_16W_10E6_Pi_CHAK-DESKTOP.txt"
-ass102 = dir_out / "F_10W_10E6_Assignment102_CHAK-DESKTOP.txt"
-piSocket = dir_out / "F_16W_10E6_PiSocket_CHAK-DESKTOP.txt"
+def scalaForte10e6():
+    # pi = call_main(16, 10, 1000000, "pi")
+    # ass102 = call_main(10, 10, 1000000, "ass102")
+    # piSocket = call_main_sockets(16, 10, 1000000)
 
-speedupCurvePi = speedup_curve(speedup(pi), "16 workers, 10^6 points, Pi", "--")
-speedupCurveAss102 = speedup_curve(
-    speedup(ass102), "10 workers, 10^6 points, Assignment102", "--"
-)
-speedupCurvePiSocket = speedup_curve(
-    speedup(piSocket), "16 workers, 10^6 points, PiSocket", "--"
-)
+    pi = dir_out / "F_16W_10E6_Pi_CHAK-DESKTOP.txt"
+    ass102 = dir_out / "F_10W_10E6_Assignment102_CHAK-DESKTOP.txt"
+    piSocket = dir_out / "F_16W_10E6_PiSocket_CHAK-DESKTOP.txt"
 
-for curve in [speedupCurvePi, speedupCurveAss102, speedupCurvePiSocket]:
-    plot_curve(curve)
+    speedupCurvePi = speedup_curve(speedup(pi), "16 workers, 10^6 points, Pi", "--")
+    speedupCurveAss102 = speedup_curve(
+        speedup(ass102), "10 workers, 10^6 points, Assignment102", "--"
+    )
+    speedupCurvePiSocket = speedup_curve(
+        speedup(piSocket), "16 workers, 10^6 points, PiSocket", "--"
+    )
+
+    for curve in [speedupCurvePi, speedupCurveAss102, speedupCurvePiSocket]:
+        plot_curve(curve)
 
 
+############################ Scalabilité faible 10^7 points ############################
+
+
+def scalaFaible10e7():
+    # pi = call_main(16, 10, 10000000, "pi", "True")
+    # piSocket = call_main_sockets(16, 10, 10000000, "True")
+
+    pi = dir_out / "W_16W_10E7_Pi_CHAK-DESKTOP.txt"
+    piSocket = dir_out / "W_16W_10E7_PiSocket_CHAK-DESKTOP.txt"
+
+    speedupCurvePi = speedup_curve(
+        speedup(pi), "16 workers, 10^7 points, Pi, CHAK-DESKTOP", "--"
+    )
+    speedupCurvePiSocket = speedup_curve(
+        speedup(piSocket), "16 workers, 10^7 points, PiSocket, CHAK-DESKTOP", "--"
+    )
+
+    for curve in [speedupCurvePi, speedupCurvePiSocket]:
+        plot_curve(curve)
+
+
+scalaFaible10e7()
+plot_weak_scaling(16, "Speedup Curve")
+
+scalaForte10e6()
+plot_speedups(16, "Speedup Curve")
+
+scalaForte10e7()
+plot_speedups(16, "Speedup Curve")
+
+scalaForte10e8()
 plot_speedups(16, "Speedup Curve")
