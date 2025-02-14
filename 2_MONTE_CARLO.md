@@ -27,8 +27,12 @@ Chakib OUALI - 3FA - 2024
       - [MasterSocket](#mastersocket)
       - [WorkerSocket](#workersocket)
   - [Automatisation de l'exécution des différents programmes](#automatisation-de-lexécution-des-différents-programmes)
-  - [Analyse de temps d'exécution](#analyse-de-temps-dexécution)
+  - [Analyse de performances](#analyse-de-performances)
     - [Définition de scalabilité faible et forte](#définition-de-scalabilité-faible-et-forte)
+    - [Mesures de performances dans le cadre de la norme ISO/IEC 25010](#mesures-de-performances-dans-le-cadre-de-la-norme-isoiec-25010)
+    - [1. **Functional Suitability (Adéquation fonctionnelle)**](#1-functional-suitability-adéquation-fonctionnelle)
+    - [2. **Performance Efficiency (Efficacité des performances)**](#2-performance-efficiency-efficacité-des-performances)
+    - [3. **Maintenability (Maintenabilité du code)**](#3-maintenability-maintenabilité-du-code)
 
 ---
 
@@ -280,7 +284,7 @@ NbProcess Error Estimation Ntot Time Total
 ...
 ```
 
-## Analyse de temps d'exécution
+## Analyse de performances
 
 ### Définition de scalabilité faible et forte
 
@@ -292,7 +296,7 @@ La scalabilité est la capacité d'un système à s'adapter à une charge de tra
 Pour mesurer la scalabilité, on utilise le speedup, qui est le rapport entre le temps d'exécution d'un programme sur un seul processeur et le temps d'exécution du même programme sur plusieurs processeurs. On peut calculer le speedup comme suit :
 
 $$
-Speedup = \frac{T_{1}}{T_{n}}
+\text{Speedup} = \frac{T_{1}}{T_{n}}
 $$
 
 où :
@@ -307,5 +311,54 @@ Le speedup idéal est linéaire, c'est-à-dire que le speedup est égal au nombr
 *Figure 2 : Speedup idéal*
 
 Dans cette figure la droite noire correspond le speedup idéal dans le cas de la scalabilité forte. La droite bleue correspond quant à elle à la scalabilité faible.
+
+Ainsi, grâce à l'automatisation de l'exécution des différents programmes et de l'écriture des résultats dans un fichier, on peut facilement analyser les performances des algorithmes et mesurer leur scalabilité.
+
+### Mesures de performances dans le cadre de la norme ISO/IEC 25010
+
+La norme *ISO/IEC 25010* définit un cadre pour évaluer la qualité des logiciels en se basant sur plusieurs critères. Dans le cas du calcul de $\pi$ par la méthode de Monte Carlo, plusieurs mesures peuvent être appliquées pour évaluer les performances du programme.  
+
+### 1. **Functional Suitability (Adéquation fonctionnelle)**  
+
+L’adéquation fonctionnelle mesure la capacité du logiciel à fournir des fonctions qui répondent aux besoins spécifiés. Dans notre cas, cela se traduit par la justesse du calcul de $\pi$.  
+
+- **Functional Correctness (Correction fonctionnelle)**  
+  - On compare la valeur estimée de $\pi$ avec la valeur réelle (`Math.PI` en Java).  
+  - Une erreur relative peut être calculée (c'est celle qu'on utilise dans nos programme et qu'on enregistre dans les fichiers de résultats) :  
+    $$ \text{Erreur} = \left| \frac{\pi_{\text{estimé}} - \pi_{\text{réel}}}{\pi_{\text{réel}}} \right| $$  
+  - Le nombre d’itérations influence la précision du résultat.  
+
+### 2. **Performance Efficiency (Efficacité des performances)**  
+
+Ce critère mesure la rapidité et l’utilisation des ressources du programme.  
+
+- **Time Behavior (Comportement temporel)**  
+  - **Temps d’exécution total** :  
+    On mesure le temps nécessaire pour exécuter l’algorithme en fonction du nombre de threads (`T_n`).  
+  - **Speedup** :  
+    On évalue l’accélération obtenue en augmentant le nombre de cœurs processeurs (`P`) :  
+    $$ \text{Speedup} = \frac{T_1}{T_P} $$  
+  - **Évolution du temps d’exécution** en fonction du nombre d’itérations (`N`).  
+
+- **Resource Utilization (Utilisation des ressources)**  
+  - Utilisation du processeur (`CPU usage`).  
+  - Occupation mémoire (quantité de RAM utilisée).  
+  - Bande passante consommée dans le cas de la version distribuée (sockets).  
+
+- **Capacity (Capacité maximale)**  
+  - Combien de threads (workers) peuvent être utilisés **avant que la performance ne se dégrade** ?  
+  - Influence du **nombre de processus (`P`) sur l’overhead** (communication entre threads ou machines).  
+
+### 3. **Maintenability (Maintenabilité du code)**  
+
+- **Modularity (Modularité)** :  
+  - Séparation des responsabilités en classes (`Main`, `Master`, `Worker`).  
+  - Découpage du code en fichiers distincts (`Assignment102.java`, `Pi.java`, etc.).  
+- **Reusability (Réutilisabilité)** :  
+  - Possibilité de réutiliser la classe `Worker` dans d’autres simulations Monte Carlo.  
+- **Testability (Testabilité)** :  
+  - Facilité à tester la précision du calcul en automatisant la comparaison avec la vraie valeur de $\pi$.  
+
+En appliquant ces critères de la norme *ISO/IEC 25010*, nous pouvons analyser les performances du programme et identifier des pistes d’amélioration. Les principaux défis sont la gestion de l’overhead et l’optimisation du parallélisme pour maximiser le speedup et l’efficacité de l’algorithme.
 
 TODO : Sources, crédits
