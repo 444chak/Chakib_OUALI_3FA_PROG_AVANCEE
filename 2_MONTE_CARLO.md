@@ -30,9 +30,10 @@ Chakib OUALI - 3FA - 2024
   - [Analyse de performances](#analyse-de-performances)
     - [Définition de scalabilité faible et forte](#définition-de-scalabilité-faible-et-forte)
     - [Mesures de performances dans le cadre de la norme ISO/IEC 25010](#mesures-de-performances-dans-le-cadre-de-la-norme-isoiec-25010)
-    - [1. Functional Suitability (Adéquation fonctionnelle)](#1-functional-suitability-adéquation-fonctionnelle)
-    - [2. Performance Efficiency (Efficacité des performances)](#2-performance-efficiency-efficacité-des-performances)
-    - [3. Maintenability (Maintenabilité du code)](#3-maintenability-maintenabilité-du-code)
+      - [1. Functional Suitability (Adéquation fonctionnelle)](#1-functional-suitability-adéquation-fonctionnelle)
+      - [2. Performance Efficiency (Efficacité des performances)](#2-performance-efficiency-efficacité-des-performances)
+      - [3. Maintenability (Maintenabilité du code)](#3-maintenability-maintenabilité-du-code)
+  - [Expériences et résultats](#expériences-et-résultats)
 
 ---
 
@@ -318,7 +319,7 @@ Ainsi, grâce à l'automatisation de l'exécution des différents programmes et 
 
 La norme *ISO/IEC 25010* définit un cadre pour évaluer la qualité des logiciels en se basant sur plusieurs critères. Dans le cas du calcul de $\pi$ par la méthode de Monte Carlo, plusieurs mesures peuvent être appliquées pour évaluer les performances du programme.  
 
-### 1. Functional Suitability (Adéquation fonctionnelle)  
+#### 1. Functional Suitability (Adéquation fonctionnelle)  
 
 L’adéquation fonctionnelle mesure la capacité du logiciel à fournir des fonctions qui répondent aux besoins spécifiés. Dans notre cas, cela se traduit par la justesse du calcul de $\pi$.  
 
@@ -328,7 +329,7 @@ L’adéquation fonctionnelle mesure la capacité du logiciel à fournir des fon
     $\text{Erreur} = \left| \frac{\pi_{\text{estimé}} - \pi_{\text{réel}}}{\pi_{\text{réel}}} \right|$  
   - Le nombre d’itérations influence la précision du résultat.  
 
-### 2. Performance Efficiency (Efficacité des performances)  
+#### 2. Performance Efficiency (Efficacité des performances)  
 
 Ce critère mesure la rapidité et l’utilisation des ressources du programme.  
 
@@ -349,7 +350,7 @@ Ce critère mesure la rapidité et l’utilisation des ressources du programme.
   - Combien de threads (workers) peuvent être utilisés **avant que la performance ne se dégrade** ?  
   - Influence du **nombre de processus (`P`) sur l’overhead** (communication entre threads ou machines).  
 
-### 3. Maintenability (Maintenabilité du code)  
+#### 3. Maintenability (Maintenabilité du code)  
 
 - **Modularity (Modularité)** :  
   - Séparation des responsabilités en classes (`Main`, `Master`, `Worker`).  
@@ -360,5 +361,7 @@ Ce critère mesure la rapidité et l’utilisation des ressources du programme.
   - Facilité à tester la précision du calcul en automatisant la comparaison avec la vraie valeur de $\pi$.  
 
 En appliquant ces critères de la norme *ISO/IEC 25010*, nous pouvons analyser les performances du programme et identifier des pistes d’amélioration. Les principaux défis sont la gestion de l’overhead et l’optimisation du parallélisme pour maximiser le speedup et l’efficacité de l’algorithme.
+
+## Expériences et résultats
 
 TODO : Sources, crédits

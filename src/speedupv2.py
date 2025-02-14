@@ -27,9 +27,6 @@ def clean_out_dir():
         f.unlink()
 
 
-# clean_out_dir()
-
-
 def call_main(workers, number_of_experiments, total_count, algo, *args):
     file = path / "Main.java"
     out = run_java(
@@ -308,14 +305,68 @@ def scalaFaible10e7():
         plot_curve(curve)
 
 
-scalaFaible10e7()
-plot_weak_scaling(16, "Speedup Curve")
+def piCurves():
+    pi10e6 = call_main(20, 10, 1000000, "pi")
+    pi10e7 = call_main(20, 10, 10000000, "pi")
+    pi10e8 = call_main(20, 10, 100000000, "pi")
+    pi10e9 = call_main(20, 10, 1000000000, "pi")
 
-scalaForte10e6()
+    # pi10e6 = dir_out / "Pi_25-02-14__10-33-08-338_DESKTOP-UN1RB3M.txt"
+    # pi10e7 = dir_out / "Pi_25-02-14__10-33-10-3310_DESKTOP-UN1RB3M.txt"
+    # pi10e8 = dir_out / "Pi_25-02-14__10-33-30-3330_DESKTOP-UN1RB3M.txt"
+
+    speedupCurvePi10e6 = speedup_curve(speedup(pi10e6), "20 workers, 10^6 points, Pi")
+    speedupCurvePi10e7 = speedup_curve(speedup(pi10e7), "20 workers, 10^7 points, Pi")
+    speedupCurvePi10e8 = speedup_curve(speedup(pi10e8), "20 workers, 10^8 points, Pi")
+    speedupCurvePi10e9 = speedup_curve(speedup(pi10e9), "20 workers, 10^9 points, Pi")
+
+    for curve in [speedupCurvePi10e6, speedupCurvePi10e7, speedupCurvePi10e8]:
+        plot_curve(curve)
+
+
+def socketsCurves():
+    piSocket10e6 = call_main_sockets(20, 10, 1000000)
+    piSocket10e7 = call_main_sockets(20, 10, 10000000)
+    piSocket10e8 = call_main_sockets(20, 10, 100000000)
+    piSocket10e8 = call_main_sockets(20, 10, 1000000000)
+
+    # piSocket10e6 = dir_out / "PiSocket_25-02-14__10-17-01-171_DESKTOP-UN1RB3M.txt"
+    # piSocket10e7 = dir_out / "PiSocket_25-02-14__10-18-11-1811_DESKTOP-UN1RB3M.txt"
+    # piSocket10e8 = dir_out / "PiSocket_25-02-14__10-21-10-2110_DESKTOP-UN1RB3M.txt"
+
+    speedupCurvePiSocket10e6 = speedup_curve(
+        speedup(piSocket10e6), "20 workers, 10^6 points, PiSocket"
+    )
+    speedupCurvePiSocket10e7 = speedup_curve(
+        speedup(piSocket10e7), "20 workers, 10^7 points, PiSocket"
+    )
+    speedupCurvePiSocket10e8 = speedup_curve(
+        speedup(piSocket10e8), "20 workers, 10^8 points, PiSocket"
+    )
+    speedupCurvePiSocket10e9 = speedup_curve(
+        speedup(piSocket10e8), "20 workers, 10^9 points, PiSocket"
+    )
+
+    for curve in [
+        speedupCurvePiSocket10e6,
+        speedupCurvePiSocket10e7,
+        speedupCurvePiSocket10e8,
+        speedupCurvePiSocket10e9,
+    ]:
+        plot_curve(curve)
+
+
+# scalaFaible10e7()
+# plot_weak_scaling(16, "Speedup Curve")
+
+# scalaForte10e6()
+# plot_speedups(16, "Speedup Curve")
+
+# scalaForte10e7()
+# plot_speedups(16, "Speedup Curve")
+
+# scalaForte10e8()
+socketsCurves()
 plot_speedups(16, "Speedup Curve")
-
-scalaForte10e7()
-plot_speedups(16, "Speedup Curve")
-
-scalaForte10e8()
+piCurves()
 plot_speedups(16, "Speedup Curve")

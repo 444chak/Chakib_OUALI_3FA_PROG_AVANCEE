@@ -11,7 +11,7 @@ import java.net.*;
  */
 public class MasterSocket {
 
-    static int maxServer = 16;
+    static int maxServer = 30;
 
     static String[] tab_total_workers = new String[maxServer];
     static final String ip = "127.0.0.1";
