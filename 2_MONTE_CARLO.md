@@ -325,9 +325,7 @@ L’adéquation fonctionnelle mesure la capacité du logiciel à fournir des fon
 - **Functional Correctness (Correction fonctionnelle)**  
   - On compare la valeur estimée de $\pi$ avec la valeur réelle (`Math.PI` en Java).  
   - Une erreur relative peut être calculée (c'est celle qu'on utilise dans nos programme et qu'on enregistre dans les fichiers de résultats) :  
-    $$
-    \text{Erreur} = \left| \frac{\pi_{\text{estimé}} - \pi_{\text{réel}}}{\pi_{\text{réel}}} \right|
-    $$  
+    $\text{Erreur} = \left| \frac{\pi_{\text{estimé}} - \pi_{\text{réel}}}{\pi_{\text{réel}}} \right|$  
   - Le nombre d’itérations influence la précision du résultat.  
 
 ### 2. Performance Efficiency (Efficacité des performances)  
@@ -339,9 +337,7 @@ Ce critère mesure la rapidité et l’utilisation des ressources du programme.
     On mesure le temps nécessaire pour exécuter l’algorithme en fonction du nombre de threads (`T_n`).  
   - **Speedup** :  
     On évalue l’accélération obtenue en augmentant le nombre de cœurs processeurs (`P`) :  
-    $$
-    \text{Speedup} = \frac{T_1}{T_P}
-    $$  
+    $\text{Speedup} = \frac{T_1}{T_P}$  
   - **Évolution du temps d’exécution** en fonction du nombre d’itérations (`N`).  
 
 - **Resource Utilization (Utilisation des ressources)**  
