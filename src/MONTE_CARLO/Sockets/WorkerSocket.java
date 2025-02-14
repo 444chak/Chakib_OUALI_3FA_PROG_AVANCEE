@@ -45,7 +45,7 @@ public class WorkerSocket {
                 int numIterations = Integer.parseInt(str);
                 Master master = new Master();
                 int numWorkers = 1;
-                Result result = master.doRun(numIterations / numWorkers, numWorkers, false);
+                Result result = master.doRun(numIterations / numWorkers, numWorkers, false, false);
                 long circleCount = result.getTotal();
                 pWrite.println(circleCount);
             }

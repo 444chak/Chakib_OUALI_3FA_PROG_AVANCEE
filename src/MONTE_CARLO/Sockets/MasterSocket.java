@@ -34,6 +34,8 @@ public class MasterSocket {
         System.out.println("#########################################");
         int[] workers_ports;
 
+        boolean scalaFaible = false;
+
         if (args.length > 0) {
             numWorkers = Integer.parseInt(args[0]);
             if (numWorkers > maxServer) {
@@ -44,6 +46,12 @@ public class MasterSocket {
             workers_ports = new int[numWorkers];
             for (int i = 0; i < numWorkers; i++) {
                 workers_ports[i] = Integer.parseInt(args[i + 3]);
+            }
+            if (args.length > 3 + numWorkers) {
+                scalaFaible = Boolean.parseBoolean(args[3 + numWorkers]);
+                if (scalaFaible) {
+                    totalCount = Integer.parseInt(args[1]);
+                }
             }
 
         } else {
@@ -84,8 +92,8 @@ public class MasterSocket {
             for (int i = 0; i < numWorkers; i++) {
                 total += Integer.parseInt(tab_total_workers[i]);
             }
-            pi = 4.0 * total / totalCount / numWorkers;
 
+            pi = 4.0 * total / totalCount / numWorkers;
             stopTime = System.currentTimeMillis();
 
             // System.out.println("\nPi : " + pi);
