@@ -34,6 +34,13 @@ Chakib OUALI - 3FA - 2024
       - [2. Performance Efficiency (Efficacité des performances)](#2-performance-efficiency-efficacité-des-performances)
       - [3. Maintenability (Maintenabilité du code)](#3-maintenability-maintenabilité-du-code)
   - [Expériences et résultats](#expériences-et-résultats)
+    - [Scalabilité forte](#scalabilité-forte)
+      - [Pi](#pi-1)
+        - [Analyse des erreurs](#analyse-des-erreurs)
+        - [Observations](#observations)
+        - [Interprétation des résultats](#interprétation-des-résultats)
+      - [PiSocket](#pisocket)
+      - [Comparaison Pi et PiSocket](#comparaison-pi-et-pisocket)
 
 ---
 
@@ -363,5 +370,106 @@ Ce critère mesure la rapidité et l’utilisation des ressources du programme.
 En appliquant ces critères de la norme *ISO/IEC 25010*, nous pouvons analyser les performances du programme et identifier des pistes d’amélioration. Les principaux défis sont la gestion de l’overhead et l’optimisation du parallélisme pour maximiser le speedup et l’efficacité de l’algorithme.
 
 ## Expériences et résultats
+
+Les expériences menées sur les différents programmes *Assignment102*, *Pi* et *PiSocket* ont permis de mesurer les performances des algorithmes et d’analyser leur scalabilité. Les résultats obtenus ont été enregistrés dans des fichiers de résultats pour une analyse plus approfondie.
+Ces expériences sont à la fois effectués sur les machines de l'IUT et sur des machines personnelles.
+
+Configurations :
+
+- Machine de l'IUT :
+  - TODO
+
+- Machine personnelle
+  - i5-12500H
+  - 16 Go de RAM
+  - 12 coeurs
+  - 16 threads
+  
+Pour chaque programme, on les exécute avec un nombre de points différents, et un nombre de workers allant de 1 jusqu'à un nombre dépassant le nombre de coeurs de la machine. Chaque exécution est répétée plusieurs fois pour obtenir une moyenne des résultats.
+
+### Scalabilité forte
+
+#### Pi
+
+<img src="assets/f3_pi_speedup_chak_laptop.png" alt="Speedup Pi" width="500">  
+
+*Figure 3 : Speedup de l'algorithme Pi sur un ordinateur personnel*  
+
+Cette figure montre l'évolution du speedup en fonction du nombre de workers utilisés pour l'algorithme Pi. On a effectué l'expérience avec des workers de 1 à 20 et avec 10e7 et 10e9 points. On observe que le speedup augmente avec le nombre de workers, mais il atteint un plateau à partir de 16 workers. Cela s'explique par les limitations matérielles de la machine, qui ne peut pas gérer plus de 16 threads en parallèle.
+
+##### Analyse des erreurs
+
+Le graphique ci-dessous illustre l'évolution de l'erreur pour différentes tailles d'échantillons ($10^6$, $10^7$, $10^8$, et $10^9$ points). Chaque série de données inclut :
+
+- Les **erreurs individuelles** (points colorés).
+- Les **médianes** des erreurs pour chaque taille d'échantillon (points foncés).
+
+<img src="assets/f4_pi_error_chak_laptop.png" alt="Erreur Monte Carlo" width="800">
+
+*Figure 4 : Erreur en fonction du nombre de points pour l'estimation de $\pi$.*  
+
+##### Observations
+
+**Diminution logarithmique de l'erreur**  
+
+L'erreur diminue proportionnellement au logarithme du nombre de points. Pour $10^6$ points, l'erreur est généralement autour de $10^{-3}$, tandis qu'elle atteint approximativement $10^{-7}$ pour $10^9$ points.
+
+**Stabilité des médianes**  
+
+Les médianes (représentées par les points foncés) montrent une stabilité relative pour chaque taille d'échantillon. Cette constance indique que les estimations sont cohérentes malgré les fluctuations inhérentes à la nature aléatoire de la méthode Monte Carlo.
+
+**Dispersion des erreurs individuelles**  
+
+La dispersion est plus importante pour les échantillons plus petits ($10^6$), ce qui reflète une variabilité accrue dans les estimations. Pour les échantillons plus grands ($10^9$), la dispersion devient nettement moins importante, démontrant une convergence plus stable vers la valeur réelle de $\pi$.
+
+##### Interprétation des résultats
+
+**Convergence statistique**  
+
+La méthode Monte Carlo repose sur la loi des grands nombres : plus le nombre de points générés est important, plus l'estimation converge vers la valeur réelle. Cette propriété fondamentale explique pourquoi nous observons une diminution logarithmique de l'erreur avec l'augmentation du nombre de points dans nos expériences.
+
+**Impact du parallélisme**  
+
+Le parallélisme joue un rôle crucial dans notre implémentation car il permet d'augmenter rapidement le nombre total de points générés, améliorant ainsi la précision tout en réduisant le temps d'exécution. Toutefois, nos résultats montrent qu'au-delà d'un certain seuil (lié aux limitations matérielles), les gains deviennent marginaux en raison des surcharges liées à la synchronisation entre threads ou processus.
+
+**Limites pratiques**  
+
+Bien que théoriquement l'erreur puisse être réduite indéfiniment en augmentant le nombre de points, cela entraîne une augmentation exponentielle du temps et des ressources nécessaires. Nos expériences démontrent qu'une balance doit être trouvée entre précision souhaitée et coûts computationnels, particulièrement dans des environnements où les ressources sont limitées.
+
+#### PiSocket
+
+<img src="assets/f5_pisocket_speedup_chak_laptop.png" alt="Speedup PiSocket" width="500">
+
+*Figure 5 : Speedup de l'algorithme PiSocket sur un ordinateur personnel*  
+
+De la même manière que pour l'algorithme Pi, on observe une augmentation du speedup avec le nombre de workers, mais un plateau à partir de 16 workers. Cela confirme que la machine ne peut pas gérer plus de 16 threads en parallèle.
+
+Ci-dessous, le graphique de l'erreur pour l'algorithme PiSocket :
+
+<img src="assets/f6_pisocket_error_chak_laptop.png" alt="Erreur Monte Carlo PiSocket" width="800">
+
+*Figure 6 : Erreur en fonction du nombre de points pour l'estimation de $\pi$ avec PiSocket*
+
+Le graphique est similaire à celui de l'algorithme Pi, avec une diminution logarithmique de l'erreur et une convergence statistique vers la valeur réelle de $\pi$. Les observations et interprétations sont également similaires.
+
+#### Comparaison Pi et PiSocket
+
+Pi et PiSockets sont des algorithmes similaires, mais PiSocket utilise des sockets pour la communication entre le maître et les workers. Les performances des deux algorithmes sont comparées ci-dessous.
+
+<img src="assets/f7_pisocket_and_pi_sideds_speedup_chak_laptop.png" alt="Comparaison Pi et PiSocket" width="800">
+
+*Figure 7 : Comparaison du speedup entre Pi et PiSocket sur un ordinateur personnel*  
+
+Cette figure montre à gauche les résultats pour PiSocket et à droite pour Pi. On observe que les deux algorithmes ont des performances similaires en termes de speedup, avec un plateau à partir de 16 workers. Cependant, on semble remarquer que Pi est légèrement plus performant que PiSocket.
+
+Pour confirmer ceci, la figure ci-dessous superpose les deux graphiques :
+
+<img src="assets/f8_pisocket_and_pi_mergeds_speedup_chak_laptop.png" alt="Comparaison Pi et PiSocket superposés" width="800">
+
+*Figure 8 : Comparaison du speedup entre Pi et PiSocket superposés sur un ordinateur personnel*  
+
+À gauche, on a les courbes pour 10e7 points, et à droite pour 10e9 points. On observe que les courbes suivent plus ou moins la même tendance. La différence entre les deux courbes correspond à l'overhead lié à l'utilisation des sockets dans PiSocket.
+
+Cependant, l'overhead semble plus faible avec 10e9, ce qui indique que l'utilisation des sockets est plus efficace pour des échantillons plus importants.
 
 TODO : Sources, crédits

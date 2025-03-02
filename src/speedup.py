@@ -321,16 +321,16 @@ piSocket_s_forte = {
 }
 
 
-def piCurves(subplot):
+def piCurves(subplot, a10e6=False, a10e7=True, a10e8=False, a10e9=True):
     # pi10e6 = call_main(20, 10, 1000000, "pi")
     # pi10e7 = call_main(20, 10, 10000000, "pi")
     # pi10e8 = call_main(20, 10, 100000000, "pi")
     # pi10e9 = call_main(20, 10, 1000000000, "pi")
 
-    a10e6 = False
-    a10e7 = True
-    a10e8 = False
-    a10e9 = True
+    # a10e6 = False
+    # a10e7 = True
+    # a10e8 = False
+    # a10e9 = True
 
     speedupCurvePi10e6 = speedup_curve(
         speedup(pi_s_forte["10e6"]), "20 workers, 10^6 points, Pi"
@@ -355,16 +355,16 @@ def piCurves(subplot):
             plot_curve(curve, subplot)
 
 
-def socketsCurves(subplot):
+def socketsCurves(subplot, a10e6=False, a10e7=True, a10e8=False, a10e9=True):
     # piSocket10e6 = call_main_sockets(20, 10, 1000000)
     # piSocket10e7 = call_main_sockets(20, 10, 10000000)
     # piSocket10e8 = call_main_sockets(20, 10, 100000000)
     # piSocket10e8 = call_main_sockets(20, 10, 1000000000)
 
-    a10e6 = False
-    a10e7 = True
-    a10e8 = False
-    a10e9 = True
+    # a10e6 = False
+    # a10e7 = True
+    # a10e8 = False
+    # a10e9 = True
 
     speedupCurvePiSocket10e6 = speedup_curve(
         speedup(piSocket_s_forte["10e6"]), "20 workers, 10^6 points, PiSocket"
@@ -400,16 +400,158 @@ def socketsCurves(subplot):
 
 # scalaForte10e8()
 
-fig, (left, right) = plt.subplots(1, 2, figsize=(15, 7))
-plot_speedups(20, "Speedup Curve - Sockets - CHAK_LAPTOP, 16 THREADS", left)
-plot_speedups(20, "Speedup Curve - Pi - CHAK_LAPTOP, 16 THREADS", right)
+################
 
-socketsCurves(left)
-piCurves(right)
+fig, (left, right) = plt.subplots(1, 2, figsize=(15, 7))
+plot_speedups(20, "Speedup Curve CHAK_LAPTOP, 16 THREADS", left)
+plot_speedups(20, "Speedup Curve CHAK_LAPTOP, 16 THREADS", right)
+
+socketsCurves(left, a10e6=False, a10e7=True, a10e8=False, a10e9=False)
+socketsCurves(right, a10e6=False, a10e7=False, a10e8=False, a10e9=True)
+piCurves(left, a10e6=False, a10e7=True, a10e8=False, a10e9=False)
+piCurves(right, a10e6=False, a10e7=False, a10e8=False, a10e9=True)
 left.legend(loc="upper left", bbox_to_anchor=(0.02, 0.98), fontsize="small")
 right.legend(loc="upper left", bbox_to_anchor=(0.02, 0.98), fontsize="small")
 
 plt.tight_layout()
 plt.show()
 
-# Add legends to the subplots with better positioning
+###############
+
+# fig, graph = plt.subplots(1, 1, figsize=(15, 7))
+# plot_speedups(20, "Speedup Curve - Pi - CHAK_LAPTOP, 16 THREADS", graph)
+# piCurves(graph)
+# graph.legend(loc="upper left", bbox_to_anchor=(0.02, 0.98), fontsize="small")
+# plt.tight_layout()
+# plt.show()
+
+fig, graph = plt.subplots(1, 1, figsize=(15, 7))
+plot_speedups(20, "Speedup Curve - PiSocket - CHAK_LAPTOP, 16 THREADS", graph)
+socketsCurves(graph)
+graph.legend(loc="upper left", bbox_to_anchor=(0.02, 0.98), fontsize="small")
+plt.tight_layout()
+plt.show()
+
+
+def plot_error_graph(data_dict, title, xlabel, ylabel, output_file=None):
+    """
+    Plots error vs number of points for multiple datasets on the same graph.
+
+    :param data_dict: Dictionary mapping dataset names to lists of tuples (Npoints, Error).
+    :param title: Title of the graph.
+    :param xlabel: X-axis label.
+    :param ylabel: Y-axis label.
+    :param output_file: Path to save the graph (optional).
+    """
+    plt.figure(figsize=(12, 8))
+
+    # Different colors for different datasets
+    colors = ["blue", "red", "green", "purple", "orange"]
+    colors_dark = ["navy", "darkred", "darkgreen", "indigo", "darkorange"]
+
+    for i, (label, data) in enumerate(data_dict.items()):
+        color = colors[i % len(colors)]
+        color_dark = colors_dark[i % len(colors_dark)]
+
+        # Convert data to numpy arrays
+        n_points = np.array([d[0] for d in data])
+        errors = np.array([d[1] for d in data])
+
+        # Calculate medians for each unique value of Npoints
+        unique_n_points = np.unique(n_points)
+        medians = [np.median(errors[n_points == n]) for n in unique_n_points]
+
+        # Plot individual points (with low alpha for clarity)
+        plt.scatter(
+            n_points, errors, color=color, alpha=0.2, s=20, label=f"{label} - points"
+        )
+
+        # Plot medians with connecting lines
+        plt.plot(
+            unique_n_points,
+            medians,
+            color=color_dark,
+            linestyle="-",
+            marker="o",
+            markersize=8,
+            label=f"{label} - median",
+        )
+
+    # Format the graph
+    plt.xscale("log")
+    plt.yscale("log")
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.title(title)
+    plt.grid(True, which="both", linestyle="--", linewidth=0.5)
+    plt.legend()
+
+    if output_file:
+        plt.savefig(output_file)
+
+
+def extract_error(file_path):
+    """
+    Extracts Ntot (number of points) and Error columns from a file.
+
+    :param file_path: Path to the output file.
+    :return: List of tuples (Npoints, Error).
+    """
+    data = []
+    first_n_points = None
+    with open(file_path, "r") as f:
+        reader = csv.reader(f, delimiter="\t")
+        header = next(reader)
+
+        try:
+            n_points_index = header.index("Ntot")
+            error_index = header.index("Error")
+        except ValueError as e:
+            raise ValueError(
+                "Columns 'Ntot' or 'Error' are missing in the file."
+            ) from e
+
+        for row in reader:
+            # Check if the row is valid
+            if len(row) > max(n_points_index, error_index):
+                try:
+                    n_points = int(row[n_points_index])
+
+                    error = float(row[error_index])
+                    if first_n_points is None:
+                        first_n_points = n_points
+                    data.append((first_n_points, error))
+                except ValueError:
+                    pass  # Skip malformed rows
+    return data
+
+
+# Extract error data from files
+# error10e6 = extract_error(pi_s_forte["10e6"])
+# error10e7 = extract_error(pi_s_forte["10e7"])
+# error10e8 = extract_error(pi_s_forte["10e8"])
+# error10e9 = extract_error(pi_s_forte["10e9"])
+
+error10e6 = extract_error(piSocket_s_forte["10e6"])
+error10e7 = extract_error(piSocket_s_forte["10e7"])
+error10e8 = extract_error(piSocket_s_forte["10e8"])
+error10e9 = extract_error(piSocket_s_forte["10e9"])
+
+# Create a dictionary of data for the combined plot
+data_dict = {
+    "10^6 points": error10e6,
+    "10^7 points": error10e7,
+    "10^8 points": error10e8,
+    "10^9 points": error10e9,
+}
+
+# Plot all data on the same graph
+plot_error_graph(
+    data_dict,
+    "Error vs Number of Points - Monte Carlo PiSocket Estimation",
+    "Number of Points (Npoints)",
+    "Absolute Error",
+)
+
+plt.tight_layout()
+plt.show()
