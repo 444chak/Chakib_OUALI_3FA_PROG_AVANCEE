@@ -38,8 +38,7 @@ On retrouve les classes suivantes :
 `UnMobile` : classe qui hérite de `JPanel` et qui dessine le mobile.
 `UneFenetre` : classe qui hérite de `JFrame` et qui affiche la fenêtre.
 
-Diagramme UML des classes du TP 1 Mobile :
-[![Diagramme UML TP 1 Mobile](TP_1_Mobile_UML.jpg)](TP_1_Mobile_UML.jpg)
+![Diagramme UML TP 1 Mobile](assets/TP_1_Mobile_UML.jpg)
 
 ### Mobile : Implémentation
 
@@ -122,7 +121,7 @@ est une classe abstraite.
 
 Diagramme UML des classes du package Semaphores :
 
-[![Diagramme UML TP 2 Sémaphores](Semaphores_UML.jpg)](Semaphores_UML.jpg)
+[![Diagramme UML TP 2 Sémaphores](assets/Semaphores_UML.jpg)](assets/Semaphores_UML.jpg)
 
 En utilisant la classe `Semaphore`, il est possible de gérer la section critique d'un programme en le surchargeant avec les fonctions `syncWait` et `syncSignal`.
 
@@ -189,7 +188,7 @@ La classe `Main` permet de lancer le programme.
 
 Diagramme UML des classes du TP 3 Boîte aux lettres :
 
-[![Diagramme UML TP 3 Boîte aux lettres](TP_3_BAL_UML.jpg)](TP_3_BAL_UML.jpg)
+[![Diagramme UML TP 3 Boîte aux lettres](assets/TP_3_BAL_UML.jpg)](assets/TP_3_BAL_UML.jpg)
 
 ### Boîte aux lettres : Implémentation
 
