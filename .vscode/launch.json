@@ -6,6 +6,29 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "MONTE_CARLO.Main",
+      "projectName": "Chakib_OUALI_3FA_PROG_AVANCEE_f05905b3"
+    },
+    {
+      "type": "java",
+      "name": "MasterSocket",
+      "request": "launch",
+      "mainClass": "MONTE_CARLO.Sockets.MasterSocket",
+      "projectName": "Chakib_OUALI_3FA_PROG_AVANCEE_f05905b3",
+      "args": "${command:SpecifyProgramArgs}"
+    },
+    {
+      "type": "java",
+      "name": "WorkerSocket",
+      "request": "launch",
+      "mainClass": "MONTE_CARLO.Sockets.WorkerSocket",
+      "projectName": "Chakib_OUALI_3FA_PROG_AVANCEE_f05905b3",
+      "args": "${command:SpecifyProgramArgs}"
+    },
+    {
+      "type": "java",
       "name": "Current File",
       "request": "launch",
       "mainClass": "${file}"

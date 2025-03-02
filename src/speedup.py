@@ -179,260 +179,6 @@ def plot_speedups(max_workers, title, subplot=None):
     return subplot
 
 
-def plot_weak_scaling(max_workers, title):
-    # plot linear 1 line
-    plt.plot(
-        [x for x in range(1, max_workers + 1)],
-        [1 for x in range(1, max_workers + 1)],
-        ":",
-        label="Perfect speedup",
-    )
-
-    # labels
-    plt.xlabel("Number of workers")
-    plt.ylabel("Speedup")
-
-    # grid
-    plt.grid()
-    plt.xlim(0, max_workers + 0.5)
-    plt.ylim(0, 1.5)
-
-    # window size
-
-    # ticks
-    plt.xticks(range(1, max_workers + 1))
-
-    # title
-    plt.title(title)
-    plt.legend()
-    plt.show()
-
-
-############################ 10^8 points ############################
-
-
-def scalaForte10e8():
-    # pi = call_main(16, 10, 100000000, "pi")
-    # ass102 = call_main(8, 10, 100000000, "ass102")
-    # piSocket = call_main_sockets(16, 10, 100000000)
-
-    pi = dir_out / "F_16W_10E8_Pi_CHAK-DESKTOP.txt"
-    # ass102 = dir_out / "F_8W_10E8_Assignment102_CHAK-DESKTOP.txt"
-    piSocket = dir_out / "F_16W_10E8_PiSocket_CHAK-DESKTOP.txt"
-
-    speedupCurvePi = speedup_curve(
-        speedup(pi), "16 workers, 10^8 points, Pi, CHAK-DESKTOP", "-."
-    )
-    # speedupCurveAss102 = speedup_curve(
-    #     speedup(ass102), "8 workers, 10^8 points, Assignment102, CHAK-DESKTOP"
-    # )
-    speedupCurvePiSocket = speedup_curve(
-        speedup(piSocket), "16 workers, 10^8 points, PiSocket, CHAK-DESKTOP", "-."
-    )
-
-    for curve in [speedupCurvePi, speedupCurvePiSocket]:
-        plot_curve(curve)
-
-
-############################ 10^7 points ############################
-def scalaForte10e7():
-    # pi = call_main(16, 10, 100000000, "pi")
-    # ass102 = call_main(16, 10, 100000000, "ass102")
-    # piSocket = call_main_sockets(16, 10, 100000000)
-
-    pi = dir_out / "F_16W_10E7_Pi_CHAK-DESKTOP.txt"
-    ass102 = dir_out / "F_8W_10E7_Assignment102_CHAK-DESKTOP.txt"
-    piSocket = dir_out / "F_16W_10E7_PiSocket_CHAK-DESKTOP.txt"
-
-    speedupCurvePi = speedup_curve(
-        speedup(pi), "16 workers, 10^7 points, Pi, CHAK-DESKTOP"
-    )
-    speedupCurveAss102 = speedup_curve(
-        speedup(ass102), "8 workers, 10^7 points, Assignment102, CHAK-DESKTOP"
-    )
-    speedupCurvePiSocket = speedup_curve(
-        speedup(piSocket), "16 workers, 10^7 points, PiSocket, CHAK-DESKTOP"
-    )
-
-    for curve in [speedupCurvePi, speedupCurveAss102, speedupCurvePiSocket]:
-        plot_curve(curve)
-
-
-############################ 10^6 points ############################
-
-
-def scalaForte10e6():
-    # pi = call_main(16, 10, 1000000, "pi")
-    # ass102 = call_main(10, 10, 1000000, "ass102")
-    # piSocket = call_main_sockets(16, 10, 1000000)
-
-    pi = dir_out / "F_16W_10E6_Pi_CHAK-DESKTOP.txt"
-    ass102 = dir_out / "F_10W_10E6_Assignment102_CHAK-DESKTOP.txt"
-    piSocket = dir_out / "F_16W_10E6_PiSocket_CHAK-DESKTOP.txt"
-
-    speedupCurvePi = speedup_curve(speedup(pi), "16 workers, 10^6 points, Pi", "--")
-    speedupCurveAss102 = speedup_curve(
-        speedup(ass102), "10 workers, 10^6 points, Assignment102", "--"
-    )
-    speedupCurvePiSocket = speedup_curve(
-        speedup(piSocket), "16 workers, 10^6 points, PiSocket", "--"
-    )
-
-    for curve in [speedupCurvePi, speedupCurveAss102, speedupCurvePiSocket]:
-        plot_curve(curve)
-
-
-############################ Scalabilité faible 10^7 points ############################
-
-
-def scalaFaible10e7():
-    # pi = call_main(16, 10, 10000000, "pi", "True")
-    # piSocket = call_main_sockets(16, 10, 10000000, "True")
-
-    pi = dir_out / "W_16W_10E7_Pi_CHAK-DESKTOP.txt"
-    piSocket = dir_out / "W_16W_10E7_PiSocket_CHAK-DESKTOP.txt"
-
-    speedupCurvePi = speedup_curve(
-        speedup(pi), "16 workers, 10^7 points, Pi, CHAK-DESKTOP", "--"
-    )
-    speedupCurvePiSocket = speedup_curve(
-        speedup(piSocket), "16 workers, 10^7 points, PiSocket, CHAK-DESKTOP", "--"
-    )
-
-    for curve in [speedupCurvePi, speedupCurvePiSocket]:
-        plot_curve(curve)
-
-
-CHAK_LAPTOP_PI_S_FORTE = dir_out / "CHAK_LAPTOP" / "Pi" / "s_forte"
-CHAK_LAPTOP_PISOCKET_S_FORTE = dir_out / "CHAK_LAPTOP" / "PiSocket" / "s_forte"
-
-pi_s_forte = {
-    "10e6": CHAK_LAPTOP_PI_S_FORTE / "20W_10E6_CHAK-LAPTOP.txt",
-    "10e7": CHAK_LAPTOP_PI_S_FORTE / "20W_10E7_CHAK-LAPTOP.txt",
-    "10e8": CHAK_LAPTOP_PI_S_FORTE / "20W_10E8_CHAK-LAPTOP.txt",
-    "10e9": CHAK_LAPTOP_PI_S_FORTE / "20W_10E9_CHAK-LAPTOP.txt",
-}
-
-piSocket_s_forte = {
-    "10e6": CHAK_LAPTOP_PISOCKET_S_FORTE / "20W_10E6_CHAK-LAPTOP.txt",
-    "10e7": CHAK_LAPTOP_PISOCKET_S_FORTE / "20W_10E7_CHAK-LAPTOP.txt",
-    "10e8": CHAK_LAPTOP_PISOCKET_S_FORTE / "20W_10E8_CHAK-LAPTOP.txt",
-    "10e9": CHAK_LAPTOP_PISOCKET_S_FORTE / "20W_10E9_CHAK-LAPTOP.txt",
-}
-
-
-def piCurves(subplot, a10e6=False, a10e7=True, a10e8=False, a10e9=True):
-    # pi10e6 = call_main(20, 10, 1000000, "pi")
-    # pi10e7 = call_main(20, 10, 10000000, "pi")
-    # pi10e8 = call_main(20, 10, 100000000, "pi")
-    # pi10e9 = call_main(20, 10, 1000000000, "pi")
-
-    # a10e6 = False
-    # a10e7 = True
-    # a10e8 = False
-    # a10e9 = True
-
-    speedupCurvePi10e6 = speedup_curve(
-        speedup(pi_s_forte["10e6"]), "20 workers, 10^6 points, Pi"
-    )
-    speedupCurvePi10e7 = speedup_curve(
-        speedup(pi_s_forte["10e7"]), "20 workers, 10^7 points, Pi"
-    )
-    speedupCurvePi10e8 = speedup_curve(
-        speedup(pi_s_forte["10e8"]), "20 workers, 10^8 points, Pi"
-    )
-    speedupCurvePi10e9 = speedup_curve(
-        speedup(pi_s_forte["10e9"]), "20 workers, 10^9 points, Pi"
-    )
-
-    for curve in [
-        speedupCurvePi10e6 if a10e6 else None,
-        speedupCurvePi10e7 if a10e7 else None,
-        speedupCurvePi10e8 if a10e8 else None,
-        speedupCurvePi10e9 if a10e9 else None,
-    ]:
-        if curve is not None:
-            plot_curve(curve, subplot)
-
-
-def socketsCurves(subplot, a10e6=False, a10e7=True, a10e8=False, a10e9=True):
-    # piSocket10e6 = call_main_sockets(20, 10, 1000000)
-    # piSocket10e7 = call_main_sockets(20, 10, 10000000)
-    # piSocket10e8 = call_main_sockets(20, 10, 100000000)
-    # piSocket10e8 = call_main_sockets(20, 10, 1000000000)
-
-    # a10e6 = False
-    # a10e7 = True
-    # a10e8 = False
-    # a10e9 = True
-
-    speedupCurvePiSocket10e6 = speedup_curve(
-        speedup(piSocket_s_forte["10e6"]), "20 workers, 10^6 points, PiSocket"
-    )
-    speedupCurvePiSocket10e7 = speedup_curve(
-        speedup(piSocket_s_forte["10e7"]), "20 workers, 10^7 points, PiSocket"
-    )
-    speedupCurvePiSocket10e8 = speedup_curve(
-        speedup(piSocket_s_forte["10e8"]), "20 workers, 10^8 points, PiSocket"
-    )
-    speedupCurvePiSocket10e9 = speedup_curve(
-        speedup(piSocket_s_forte["10e9"]), "20 workers, 10^9 points, PiSocket"
-    )
-
-    for curve in [
-        speedupCurvePiSocket10e6 if a10e6 else None,
-        speedupCurvePiSocket10e7 if a10e7 else None,
-        speedupCurvePiSocket10e8 if a10e8 else None,
-        speedupCurvePiSocket10e9 if a10e9 else None,
-    ]:
-        if curve is not None:
-            plot_curve(curve, subplot)
-
-
-# scalaFaible10e7()
-# plot_weak_scaling(16, "Speedup Curve")
-
-# scalaForte10e6()
-# plot_speedups(16, "Speedup Curve")
-
-# scalaForte10e7()
-# plot_speedups(16, "Speedup Curve")
-
-# scalaForte10e8()
-
-################
-
-fig, (left, right) = plt.subplots(1, 2, figsize=(15, 7))
-plot_speedups(20, "Speedup Curve CHAK_LAPTOP, 16 THREADS", left)
-plot_speedups(20, "Speedup Curve CHAK_LAPTOP, 16 THREADS", right)
-
-socketsCurves(left, a10e6=False, a10e7=True, a10e8=False, a10e9=False)
-socketsCurves(right, a10e6=False, a10e7=False, a10e8=False, a10e9=True)
-piCurves(left, a10e6=False, a10e7=True, a10e8=False, a10e9=False)
-piCurves(right, a10e6=False, a10e7=False, a10e8=False, a10e9=True)
-left.legend(loc="upper left", bbox_to_anchor=(0.02, 0.98), fontsize="small")
-right.legend(loc="upper left", bbox_to_anchor=(0.02, 0.98), fontsize="small")
-
-plt.tight_layout()
-plt.show()
-
-###############
-
-# fig, graph = plt.subplots(1, 1, figsize=(15, 7))
-# plot_speedups(20, "Speedup Curve - Pi - CHAK_LAPTOP, 16 THREADS", graph)
-# piCurves(graph)
-# graph.legend(loc="upper left", bbox_to_anchor=(0.02, 0.98), fontsize="small")
-# plt.tight_layout()
-# plt.show()
-
-fig, graph = plt.subplots(1, 1, figsize=(15, 7))
-plot_speedups(20, "Speedup Curve - PiSocket - CHAK_LAPTOP, 16 THREADS", graph)
-socketsCurves(graph)
-graph.legend(loc="upper left", bbox_to_anchor=(0.02, 0.98), fontsize="small")
-plt.tight_layout()
-plt.show()
-
-
 def plot_error_graph(data_dict, title, xlabel, ylabel, output_file=None):
     """
     Plots error vs number of points for multiple datasets on the same graph.
@@ -526,32 +272,367 @@ def extract_error(file_path):
     return data
 
 
-# Extract error data from files
-# error10e6 = extract_error(pi_s_forte["10e6"])
-# error10e7 = extract_error(pi_s_forte["10e7"])
-# error10e8 = extract_error(pi_s_forte["10e8"])
-# error10e9 = extract_error(pi_s_forte["10e9"])
+def plot_weak_scaling(max_workers, title):
+    # plot linear 1 line
+    plt.plot(
+        [x for x in range(1, max_workers + 1)],
+        [1 for x in range(1, max_workers + 1)],
+        ":",
+        label="Perfect speedup",
+    )
 
-error10e6 = extract_error(piSocket_s_forte["10e6"])
-error10e7 = extract_error(piSocket_s_forte["10e7"])
-error10e8 = extract_error(piSocket_s_forte["10e8"])
-error10e9 = extract_error(piSocket_s_forte["10e9"])
+    # labels
+    plt.xlabel("Number of workers")
+    plt.ylabel("Speedup")
 
-# Create a dictionary of data for the combined plot
+    # grid
+    plt.grid()
+    plt.xlim(0, max_workers + 0.5)
+    plt.ylim(0, 1.5)
+
+    # window size
+
+    # ticks
+    plt.xticks(range(1, max_workers + 1))
+
+    # title
+    plt.title(title)
+    plt.legend()
+    plt.show()
+
+
+def weakCurvesPi(s10e6=False, s10e7=False):
+    # pi = call_main(16, 10, 10000000, "pi", "True")
+    # piSocket = call_main_sockets(16, 10, 10000000, "True")
+
+    pi10e6 = dir_out / "CHAK_LAPTOP" / "Pi" / "s_faible" / "16W_10E6_Pi_CHAK-LAPTOP.txt"
+    pi10e7 = dir_out / "CHAK_LAPTOP" / "Pi" / "s_faible" / "16W_10E7_Pi_CHAK-LAPTOP.txt"
+
+    speedupCurvePi10e6 = speedup_curve(
+        speedup(pi10e6), "16 workers, 10^6 points, Pi, CHAK-LAPTOP", "--"
+    )
+    speedupCurvePi10e7 = speedup_curve(
+        speedup(pi10e7), "16 workers, 10^7 points, CHAK-LAPTOP", "--"
+    )
+
+    if s10e6:
+        plot_curve(speedupCurvePi10e6, plt)
+
+    if s10e7:
+        plot_curve(speedupCurvePi10e7, plt)
+
+
+def weakCurvesPiSocket(s10e6=False, s10e7=False):
+    piSocket10e6 = (
+        dir_out
+        / "CHAK_LAPTOP"
+        / "PiSocket"
+        / "s_faible"
+        / "16W_10E6_PiSocket_CHAK-LAPTOP.txt"
+    )
+    piSocket10e7 = (
+        dir_out
+        / "CHAK_LAPTOP"
+        / "PiSocket"
+        / "s_faible"
+        / "16W_10E7_PiSocket_CHAK-LAPTOP.txt"
+    )
+
+    speedupCurvePiSocket10e6 = speedup_curve(
+        speedup(piSocket10e6), "16 workers, 10^6 points, PiSocket, CHAK-LAPTOP", "--"
+    )
+    speedupCurvePiSocket10e7 = speedup_curve(
+        speedup(piSocket10e7), "16 workers, 10^7 points, PiSocket, CHAK-LAPTOP", "--"
+    )
+
+    if s10e6:
+        plot_curve(speedupCurvePiSocket10e6, plt)
+
+    if s10e7:
+        plot_curve(speedupCurvePiSocket10e7, plt)
+
+
+CHAK_LAPTOP_PI_S_FORTE = dir_out / "CHAK_LAPTOP" / "Pi" / "s_forte"
+CHAK_LAPTOP_PISOCKET_S_FORTE = dir_out / "CHAK_LAPTOP" / "PiSocket" / "s_forte"
+
+pi_s_forte = {
+    "10e6": CHAK_LAPTOP_PI_S_FORTE / "20W_10E6_CHAK-LAPTOP.txt",
+    "10e7": CHAK_LAPTOP_PI_S_FORTE / "20W_10E7_CHAK-LAPTOP.txt",
+    "10e8": CHAK_LAPTOP_PI_S_FORTE / "20W_10E8_CHAK-LAPTOP.txt",
+    "10e9": CHAK_LAPTOP_PI_S_FORTE / "20W_10E9_CHAK-LAPTOP.txt",
+}
+
+piSocket_s_forte = {
+    "10e6": CHAK_LAPTOP_PISOCKET_S_FORTE / "20W_10E6_CHAK-LAPTOP.txt",
+    "10e7": CHAK_LAPTOP_PISOCKET_S_FORTE / "20W_10E7_CHAK-LAPTOP.txt",
+    "10e8": CHAK_LAPTOP_PISOCKET_S_FORTE / "20W_10E8_CHAK-LAPTOP.txt",
+    "10e9": CHAK_LAPTOP_PISOCKET_S_FORTE / "20W_10E9_CHAK-LAPTOP.txt",
+}
+
+
+def piCurves(subplot, a10e6=False, a10e7=True, a10e8=False, a10e9=True):
+    # pi10e6 = call_main(20, 10, 1000000, "pi")
+    # pi10e7 = call_main(20, 10, 10000000, "pi")
+    # pi10e8 = call_main(20, 10, 100000000, "pi")
+    # pi10e9 = call_main(20, 10, 1000000000, "pi")
+
+    speedupCurvePi10e6 = speedup_curve(
+        speedup(pi_s_forte["10e6"]), "20 workers, 10^6 points, Pi"
+    )
+    speedupCurvePi10e7 = speedup_curve(
+        speedup(pi_s_forte["10e7"]), "20 workers, 10^7 points, Pi"
+    )
+    speedupCurvePi10e8 = speedup_curve(
+        speedup(pi_s_forte["10e8"]), "20 workers, 10^8 points, Pi"
+    )
+    speedupCurvePi10e9 = speedup_curve(
+        speedup(pi_s_forte["10e9"]), "20 workers, 10^9 points, Pi"
+    )
+
+    for curve in [
+        speedupCurvePi10e6 if a10e6 else None,
+        speedupCurvePi10e7 if a10e7 else None,
+        speedupCurvePi10e8 if a10e8 else None,
+        speedupCurvePi10e9 if a10e9 else None,
+    ]:
+        if curve is not None:
+            plot_curve(curve, subplot)
+
+
+def socketsCurves(subplot, a10e6=False, a10e7=True, a10e8=False, a10e9=True):
+    # piSocket10e6 = call_main_sockets(20, 10, 1000000)
+    # piSocket10e7 = call_main_sockets(20, 10, 10000000)
+    # piSocket10e8 = call_main_sockets(20, 10, 100000000)
+    # piSocket10e8 = call_main_sockets(20, 10, 1000000000)
+
+    speedupCurvePiSocket10e6 = speedup_curve(
+        speedup(piSocket_s_forte["10e6"]), "20 workers, 10^6 points, PiSocket"
+    )
+    speedupCurvePiSocket10e7 = speedup_curve(
+        speedup(piSocket_s_forte["10e7"]), "20 workers, 10^7 points, PiSocket"
+    )
+    speedupCurvePiSocket10e8 = speedup_curve(
+        speedup(piSocket_s_forte["10e8"]), "20 workers, 10^8 points, PiSocket"
+    )
+    speedupCurvePiSocket10e9 = speedup_curve(
+        speedup(piSocket_s_forte["10e9"]), "20 workers, 10^9 points, PiSocket"
+    )
+
+    for curve in [
+        speedupCurvePiSocket10e6 if a10e6 else None,
+        speedupCurvePiSocket10e7 if a10e7 else None,
+        speedupCurvePiSocket10e8 if a10e8 else None,
+        speedupCurvePiSocket10e9 if a10e9 else None,
+    ]:
+        if curve is not None:
+            plot_curve(curve, subplot)
+
+
+def assignment102Curves(subplot):
+    a102_10e6 = (
+        dir_out
+        / "CHAK_LAPTOP"
+        / "Assignment102"
+        / "s_forte"
+        / "10W_10E6_Assignment102_CHAK-LAPTOP.txt"
+    )
+    a102_10e7 = (
+        dir_out
+        / "CHAK_LAPTOP"
+        / "Assignment102"
+        / "s_forte"
+        / "8W_10E7_Assignment102_CHAK-LAPTOP.txt"
+    )
+
+    speedupCurveAss102_10e6 = speedup_curve(
+        speedup(a102_10e6), "10 workers, 10^6 points, Pi, CHAK-LAPTOP", "--"
+    )
+    speedupCurveAss102_10e7 = speedup_curve(
+        speedup(a102_10e7), "8 workers, 10^7 points, CHAK-LAPTOP", "--"
+    )
+
+    plot_curve(speedupCurveAss102_10e6, subplot)
+    plot_curve(speedupCurveAss102_10e7, subplot)
+
+
+################
+
+# fig, (left, right) = plt.subplots(1, 2, figsize=(15, 7))
+# plot_speedups(20, "Speedup Curve CHAK_LAPTOP, 16 THREADS", left)
+# plot_speedups(20, "Speedup Curve CHAK_LAPTOP, 16 THREADS", right)
+
+# socketsCurves(left, a10e6=False, a10e7=True, a10e8=False, a10e9=False)
+# socketsCurves(right, a10e6=False, a10e7=False, a10e8=False, a10e9=True)
+# piCurves(left, a10e6=False, a10e7=True, a10e8=False, a10e9=False)
+# piCurves(right, a10e6=False, a10e7=False, a10e8=False, a10e9=True)
+# left.legend(loc="upper left", bbox_to_anchor=(0.02, 0.98), fontsize="small")
+# right.legend(loc="upper left", bbox_to_anchor=(0.02, 0.98), fontsize="small")
+
+# plt.tight_layout()
+# plt.show()
+
+################ ass 102
+
+# fig, graph = plt.subplots(1, 1, figsize=(15, 7))
+
+# plot_speedups(10, "Speedup Curve - Assignment 102 - CHAK_LAPTOP", graph)
+# assignment102Curves(graph)
+# graph.legend(loc="upper left", bbox_to_anchor=(0.02, 0.98), fontsize="small")
+# plt.tight_layout()
+# plt.show()
+
+############# ass102 error
+
+error10e6 = extract_error(
+    dir_out
+    / "CHAK_LAPTOP"
+    / "Assignment102"
+    / "s_forte"
+    / "10W_10E6_Assignment102_CHAK-LAPTOP.txt"
+)
+
+error10e7 = extract_error(
+    dir_out
+    / "CHAK_LAPTOP"
+    / "Assignment102"
+    / "s_forte"
+    / "8W_10E7_Assignment102_CHAK-LAPTOP.txt"
+)
+
 data_dict = {
     "10^6 points": error10e6,
     "10^7 points": error10e7,
-    "10^8 points": error10e8,
-    "10^9 points": error10e9,
 }
 
-# Plot all data on the same graph
 plot_error_graph(
     data_dict,
-    "Error vs Number of Points - Monte Carlo PiSocket Estimation",
+    "Error vs Number of Points - Assignment 102",
     "Number of Points (Npoints)",
     "Absolute Error",
 )
 
 plt.tight_layout()
 plt.show()
+
+
+###############
+
+# fig, graph = plt.subplots(1, 1, figsize=(15, 7))
+# plot_speedups(20, "Speedup Curve - Pi - CHAK_LAPTOP, 16 THREADS", graph)
+# piCurves(graph)
+# graph.legend(loc="upper left", bbox_to_anchor=(0.02, 0.98), fontsize="small")
+# plt.tight_layout()
+# plt.show()
+
+###############
+
+# fig, graph = plt.subplots(1, 1, figsize=(15, 7))
+# plot_speedups(20, "Speedup Curve - PiSocket - CHAK_LAPTOP, 16 THREADS", graph)
+# socketsCurves(graph)
+# graph.legend(loc="upper left", bbox_to_anchor=(0.02, 0.98), fontsize="small")
+# plt.tight_layout()
+# plt.show()
+
+###############
+
+
+###############
+
+# Extract error data from files
+# error10e6 = extract_error(pi_s_forte["10e6"])
+# error10e7 = extract_error(pi_s_forte["10e7"])
+# error10e8 = extract_error(pi_s_forte["10e8"])
+# error10e9 = extract_error(pi_s_forte["10e9"])
+
+# error10e6 = extract_error(piSocket_s_forte["10e6"])
+# error10e7 = extract_error(piSocket_s_forte["10e7"])
+# error10e8 = extract_error(piSocket_s_forte["10e8"])
+# error10e9 = extract_error(piSocket_s_forte["10e9"])
+
+# # Create a dictionary of data for the combined plot
+# data_dict = {
+#     "10^6 points": error10e6,
+#     "10^7 points": error10e7,
+#     "10^8 points": error10e8,
+#     "10^9 points": error10e9,
+# }
+
+# # Plot all data on the same graph
+# plot_error_graph(
+#     data_dict,
+#     "Error vs Number of Points - Monte Carlo PiSocket Estimation",
+#     "Number of Points (Npoints)",
+#     "Absolute Error",
+# )
+
+# plt.tight_layout()
+# plt.show()
+
+###############
+
+
+# weakCurvesPi(s10e6=True, s10e7=True)
+# plot_weak_scaling(16, "Weak Scaling Curve - Pi")
+# plt.show()
+
+# weakCurvesPiSocket(s10e6=True, s10e7=True)
+# plot_weak_scaling(16, "Weak Scaling Curve - PiSocket")
+# plt.show()
+
+###############
+
+# error_weak_pi_10e6 = extract_error(
+#     dir_out / "CHAK_LAPTOP" / "Pi" / "s_faible" / "16W_10E6_Pi_CHAK-LAPTOP.txt"
+# )
+
+# error_weak_pi_10e7 = extract_error(
+#     dir_out / "CHAK_LAPTOP" / "Pi" / "s_faible" / "16W_10E7_Pi_CHAK-LAPTOP.txt"
+# )
+
+# data_dict = {
+#     "10^6 points": error_weak_pi_10e6,
+#     "10^7 points": error_weak_pi_10e7,
+# }
+
+# plot_error_graph(
+#     data_dict,
+#     "Error vs Number of Points - Monte Carlo Pi Estimation",
+#     "Number of Points (Npoints)",
+#     "Absolute Error",
+# )
+
+# plt.tight_layout()
+# plt.show()
+
+###############
+
+# error_weak_pisocket_10e6 = extract_error(
+#     dir_out
+#     / "CHAK_LAPTOP"
+#     / "PiSocket"
+#     / "s_faible"
+#     / "16W_10E6_PiSocket_CHAK-LAPTOP.txt"
+# )
+
+# error_weak_pisocket_10e7 = extract_error(
+#     dir_out
+#     / "CHAK_LAPTOP"
+#     / "PiSocket"
+#     / "s_faible"
+#     / "16W_10E7_PiSocket_CHAK-LAPTOP.txt"
+# )
+
+# data_dict = {
+#     "10^6 points": error_weak_pisocket_10e6,
+#     "10^7 points": error_weak_pisocket_10e7,
+# }
+
+# plot_error_graph(
+#     data_dict,
+#     "Error vs Number of Points - Monte Carlo PiSocket Estimation",
+#     "Number of Points (Npoints)",
+#     "Absolute Error",
+# )
+
+# plt.tight_layout()
+# plt.show()

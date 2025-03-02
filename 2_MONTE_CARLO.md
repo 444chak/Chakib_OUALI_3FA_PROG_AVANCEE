@@ -35,12 +35,22 @@ Chakib OUALI - 3FA - 2024
       - [3. Maintenability (Maintenabilité du code)](#3-maintenability-maintenabilité-du-code)
   - [Expériences et résultats](#expériences-et-résultats)
     - [Scalabilité forte](#scalabilité-forte)
-      - [Pi](#pi-1)
-        - [Analyse des erreurs](#analyse-des-erreurs)
-        - [Observations](#observations)
-        - [Interprétation des résultats](#interprétation-des-résultats)
-      - [PiSocket](#pisocket)
-      - [Comparaison Pi et PiSocket](#comparaison-pi-et-pisocket)
+    - [Pi - scalabilité forte](#pi---scalabilité-forte)
+      - [Analyse des erreurs](#analyse-des-erreurs)
+      - [Observations](#observations)
+      - [Interprétation des résultats](#interprétation-des-résultats)
+    - [PiSocket - scalabilité forte](#pisocket---scalabilité-forte)
+    - [Comparaison Pi et PiSocket](#comparaison-pi-et-pisocket)
+    - [Norme ISO/IEC 25010](#norme-isoiec-25010)
+      - [Efficacité des performances](#efficacité-des-performances)
+      - [Points clés](#points-clés)
+    - [Assigment102](#assigment102)
+    - [Scalabilité faible](#scalabilité-faible)
+    - [Pi - scalabilité faible](#pi---scalabilité-faible)
+    - [PiSocket - scalabilité faible](#pisocket---scalabilité-faible)
+    - [Expérience de sockets avec plusieurs machines](#expérience-de-sockets-avec-plusieurs-machines)
+  - [Conclusion](#conclusion)
+  - [Références](#références)
 
 ---
 
@@ -160,7 +170,9 @@ Ici, chaque thread est responsable de générer un certain nombre de points alé
 
 ## Implémentation
 
-La méthode de Monte Carlo est implémentée en Java à partir de deux projets différents. Une, nommée *Assignment102*, développée par Karthik Jain (TODO:Source), et l'autre, *Pi*, développée par le Dr. Steve Kautz de l'IOWA State University (TODO:Source). Ces deux projets utilisent des threads pour exécuter les tâches Monte Carlo en parallèle et calculer la valeur de $\pi$ en fonction des résultats obtenus.
+La méthode de Monte Carlo est implémentée en Java à partir de deux projets différents. Une, nommée *Assignment102*, développée par Karthik Jain (<https://gist.github.com/krthkj/9c1868c1f69142c2952683ea91ca2a37>), et l'autre, *Pi*, développée par le Dr. Steve Kautz de l'IOWA State University. Ces deux projets utilisent des threads pour exécuter les tâches Monte Carlo en parallèle et calculer la valeur de $\pi$ en fonction des résultats obtenus.
+
+---
 
 ## Paradigmes de programmation utilisés
 
@@ -171,6 +183,8 @@ Le parallélisme de boucle est un paradigme de programmation parallèle qui cons
 ### Modèle master-worker
 
 Le modèle master-worker est un modèle de programmation parallèle dans lequel un processus maître distribue des tâches à des processus esclaves (ou workers) pour maximiser l'utilisation des ressources disponibles. Dans le cas de la méthode de Monte Carlo, le processus maître est responsable de diviser le travail en tâches et de les distribuer aux workers pour effectuer les calculs. Le processus maître agrège ensuite les résultats des workers pour obtenir une estimation de $\pi$.
+
+---
 
 ## Analyse des sources & Réorganisation
 
@@ -210,7 +224,9 @@ Le code source de *Pi* est également organisé en trois classes : `Pi`, `Master
 
 Ce programme suit le paradigme master-worker pour paralléliser le calcul de $\pi$ par la méthode de Monte Carlo. Le maître initialise les workers, leur envoie les tâches à effectuer et agrège les résultats pour obtenir une estimation de $\pi$. Dans le code, le maître est représenté par la classe `Master` et les workers par la classe `Worker`.
 
-TODO : UML
+Ci-après, le diagramme UML des classes *Pi* après réorganisation :
+
+<img src="assets/uml_pi.png" alt="UML Pi" width="1000">
 
 ## Utilisations de sockets
 
@@ -228,9 +244,13 @@ Chaque worker crée un socket pour recevoir le nombre d'itérations à effectuer
 
 Pour compléter le programme, il faudrait ajouter la méthode de Monte Carlo pour le calcul de $\pi$ dans la classe `WorkerSocket`. Pour cela, on utilise le code de la `Pi` pour calculer la valeur de $\pi$. On envoie ensuite le résultat au maître pour l'agrégation.
 
-TODO : Rajouter UML
+Voici le diagramme UML des classes *PiSocket* :
+
+<img src="assets/SocketsUML.jpg" alt="UML PiSocket" width="500">
 
 Pour lancer le programme, il faut exécuter nos WorkerSocket avec les ports correspondants, puis exécuter le MasterSocket avec les ports des workers définit précédemment.
+
+---
 
 ## Automatisation de l'exécution des différents programmes
 
@@ -291,6 +311,8 @@ NbProcess Error Estimation Ntot Time Total
 2 0.0010463948616796842 3.14488 1000000 9 786220
 ...
 ```
+
+---
 
 ## Analyse de performances
 
@@ -369,35 +391,34 @@ Ce critère mesure la rapidité et l’utilisation des ressources du programme.
 
 En appliquant ces critères de la norme *ISO/IEC 25010*, nous pouvons analyser les performances du programme et identifier des pistes d’amélioration. Les principaux défis sont la gestion de l’overhead et l’optimisation du parallélisme pour maximiser le speedup et l’efficacité de l’algorithme.
 
+---
+
 ## Expériences et résultats
 
 Les expériences menées sur les différents programmes *Assignment102*, *Pi* et *PiSocket* ont permis de mesurer les performances des algorithmes et d’analyser leur scalabilité. Les résultats obtenus ont été enregistrés dans des fichiers de résultats pour une analyse plus approfondie.
-Ces expériences sont à la fois effectués sur les machines de l'IUT et sur des machines personnelles.
+Ces expériences sont effectuées sur un ordinateur personnel avec une configuration matérielle spécifique.
 
-Configurations :
+Configuration :
 
-- Machine de l'IUT :
-  - TODO
-
-- Machine personnelle
-  - i5-12500H
-  - 16 Go de RAM
-  - 12 coeurs
-  - 16 threads
+- i5-12500H
+- 16 Go de RAM
+- 12 coeurs
+- 16 threads
   
 Pour chaque programme, on les exécute avec un nombre de points différents, et un nombre de workers allant de 1 jusqu'à un nombre dépassant le nombre de coeurs de la machine. Chaque exécution est répétée plusieurs fois pour obtenir une moyenne des résultats.
 
 ### Scalabilité forte
 
-#### Pi
+Pour rappel, la scalabilité forte est la capacité d'un système à maintenir un niveau de performance constant lorsqu'on augmente le nombre de ressources (par exemple, le nombre de processeurs). Dans le cas de la méthode de Monte Carlo, la scalabilité forte se traduit par un speedup linéaire, c'est-à-dire que le speedup est égal au nombre de processeurs utilisés.
+
+### Pi - scalabilité forte
 
 <img src="assets/f3_pi_speedup_chak_laptop.png" alt="Speedup Pi" width="500">  
 
 *Figure 3 : Speedup de l'algorithme Pi sur un ordinateur personnel*  
+Cette figure montre l'évolution du speedup en fonction du nombre de workers utilisés pour l'algorithme Pi. On a effectué l'expérience avec des workers de 1 à 20 et avec $10^7$ et $10^9$ points. On observe que le speedup augmente avec le nombre de workers, mais il atteint un plateau à partir de 16 workers. Cela s'explique par les limitations matérielles de la machine, qui ne peut pas gérer plus de 16 threads en parallèle.
 
-Cette figure montre l'évolution du speedup en fonction du nombre de workers utilisés pour l'algorithme Pi. On a effectué l'expérience avec des workers de 1 à 20 et avec 10e7 et 10e9 points. On observe que le speedup augmente avec le nombre de workers, mais il atteint un plateau à partir de 16 workers. Cela s'explique par les limitations matérielles de la machine, qui ne peut pas gérer plus de 16 threads en parallèle.
-
-##### Analyse des erreurs
+#### Analyse des erreurs
 
 Le graphique ci-dessous illustre l'évolution de l'erreur pour différentes tailles d'échantillons ($10^6$, $10^7$, $10^8$, et $10^9$ points). Chaque série de données inclut :
 
@@ -408,7 +429,7 @@ Le graphique ci-dessous illustre l'évolution de l'erreur pour différentes tail
 
 *Figure 4 : Erreur en fonction du nombre de points pour l'estimation de $\pi$.*  
 
-##### Observations
+#### Observations
 
 **Diminution logarithmique de l'erreur**  
 
@@ -422,7 +443,7 @@ Les médianes (représentées par les points foncés) montrent une stabilité re
 
 La dispersion est plus importante pour les échantillons plus petits ($10^6$), ce qui reflète une variabilité accrue dans les estimations. Pour les échantillons plus grands ($10^9$), la dispersion devient nettement moins importante, démontrant une convergence plus stable vers la valeur réelle de $\pi$.
 
-##### Interprétation des résultats
+#### Interprétation des résultats
 
 **Convergence statistique**  
 
@@ -436,7 +457,9 @@ Le parallélisme joue un rôle crucial dans notre implémentation car il permet 
 
 Bien que théoriquement l'erreur puisse être réduite indéfiniment en augmentant le nombre de points, cela entraîne une augmentation exponentielle du temps et des ressources nécessaires. Nos expériences démontrent qu'une balance doit être trouvée entre précision souhaitée et coûts computationnels, particulièrement dans des environnements où les ressources sont limitées.
 
-#### PiSocket
+---
+
+### PiSocket - scalabilité forte
 
 <img src="assets/f5_pisocket_speedup_chak_laptop.png" alt="Speedup PiSocket" width="500">
 
@@ -452,7 +475,9 @@ Ci-dessous, le graphique de l'erreur pour l'algorithme PiSocket :
 
 Le graphique est similaire à celui de l'algorithme Pi, avec une diminution logarithmique de l'erreur et une convergence statistique vers la valeur réelle de $\pi$. Les observations et interprétations sont également similaires.
 
-#### Comparaison Pi et PiSocket
+---
+
+### Comparaison Pi et PiSocket
 
 Pi et PiSockets sont des algorithmes similaires, mais PiSocket utilise des sockets pour la communication entre le maître et les workers. Les performances des deux algorithmes sont comparées ci-dessous.
 
@@ -468,8 +493,121 @@ Pour confirmer ceci, la figure ci-dessous superpose les deux graphiques :
 
 *Figure 8 : Comparaison du speedup entre Pi et PiSocket superposés sur un ordinateur personnel*  
 
-À gauche, on a les courbes pour 10e7 points, et à droite pour 10e9 points. On observe que les courbes suivent plus ou moins la même tendance. La différence entre les deux courbes correspond à l'overhead lié à l'utilisation des sockets dans PiSocket.
+À gauche, on a les courbes pour $10^7$ points, et à droite pour $10^9$ points. On observe que les courbes suivent plus ou moins la même tendance. La différence entre les deux courbes correspond à l'overhead lié à l'utilisation des sockets dans PiSocket.
+Cependant, l'overhead semble plus faible avec $10^9$, ce qui indique que l'utilisation des sockets est plus efficace pour des échantillons plus importants.
 
-Cependant, l'overhead semble plus faible avec 10e9, ce qui indique que l'utilisation des sockets est plus efficace pour des échantillons plus importants.
+### Norme ISO/IEC 25010
 
-TODO : Sources, crédits
+#### Efficacité des performances
+
+**Comportement temporel** :
+
+- Le temps d'exécution s'améliore jusqu'à 16 workers.
+- Un plateau est atteint à partir de 16 workers en raison des limites matérielles.
+
+**Utilisation des ressources** :
+
+- L'utilisation des ressources est optimale jusqu'à 16 threads, correspondant à la capacité maximale de la machine.
+- Une légère baisse d'efficacité est observée au-delà de 16 threads.
+
+#### Points clés
+
+- **Scalabilité** : L'algorithme montre une bonne scalabilité jusqu'à 16 workers, mais est limité par le matériel au-delà.
+- **Précision** : La précision augmente avec le nombre de points, 10^9 points étant plus précis que 10^7.
+- **Limite matérielle** : La limite matérielle est identifiée à 16 threads parallèles.
+
+L'algorithme présente de bonnes performances selon la norme ISO/IEC 25010, avec une scalabilité efficace jusqu'aux limites matérielles. L'augmentation du nombre de points améliore la précision, mais le gain en speedup est limité par les capacités de la machine au-delà de 16 workers.
+
+### Assigment102
+
+Pour Assignment102, on exécute uniquement avec 8 et 10 workers, avec un nombre respectifs de points de $10^6$ et $10^7$. Les résultats sont les suivants :
+
+<img src="assets/f13_forte_ass102.png" alt="Speedup Assignment102" width="500">
+
+On remarque que la courbe ressemble beaucoup à une courbe de scalabilité faible. Cela montre l'inefficacité de l'algorithme pour la scalabilité forte.
+
+Si on regarde du côté de l'erreur, on a le graphique suivant :
+
+<img src="assets/f14_forte_ass102_error.png" alt="Erreur Monte Carlo Assignment102" width="800">
+
+On constate malgré tout une diminution de l'erreur en fonction du nombre de points.
+
+---
+
+### Scalabilité faible
+
+Pour la scalabilité faible, on exécute les algorithmes avec un nombre fixe de workers et on augmente la charge de travail (le nombre de points à générer). On mesure le temps d'exécution en fonction du nombre de points pour évaluer la capacité des algorithmes à maintenir un niveau de performance constant malgré une charge de travail croissante.
+
+### Pi - scalabilité faible
+
+<img src="assets/f9_faible_pi_chak_laptop.png" alt="Pi scalabilité faible" width="500">
+
+*Figure 9 : Scalabilité faible de l'algorithme Pi sur un ordinateur personnel*  
+
+Cette figure montre l'évolution du speedup en fonction du nombre de workers utilisés pour l'algorithme Pi. Chaque worker génère $10^7$ points. On observe que le speedup est presque toujours inférieur à 1. Plus le nombre de workers augmente, plus on se rapproche de $\frac{1}{2}$. Avec $10^6$ points, on passe légèrement au-dessus de 1 au début, ce qui est probablement lié à une marge d'erreur due au faible nombre de points.
+
+Concernant les erreurs, on peut observer le graphique suivant :
+
+<img src="assets/f11_faible_pi_error_chak_laptop.png" alt="Erreur Monte Carlo Pi faible scalabilité" width="800">
+
+*Figure 10 : Erreur en fonction du nombre de points pour l'estimation de $\pi$ avec Pi en scalabilité faible*  
+
+On constate comme pour la scalabilité forte une diminution de l'erreur en fonction du nombre de points.
+
+### PiSocket - scalabilité faible
+
+<img src="assets/f10_faible_pisocket_chak_laptop.png" alt="PiSocket scalabilité faible" width="500">
+
+*Figure 11 : Scalabilité faible de l'algorithme PiSocket sur un ordinateur personnel*  
+
+Pour PiSocket, on observe un speedup inférieur à 1 pour la plupart des configurations. Cela indique que l'augmentation de la charge de travail (le nombre de points) n'améliore pas les performances de l'algorithme. On peut également observer que le speedup est plus faible pour PiSocket que pour Pi.
+
+Pour les erreurs, on a le graphique suivant :
+
+<img src="assets/f12_faible_pisocket_error_chak_laptop.png" alt="Erreur Monte Carlo PiSocket faible scalabilité" width="800">
+
+*Figure 12 : Erreur en fonction du nombre de points pour l'estimation de $\pi$ avec PiSocket en scalabilité faible*  
+
+Les erreurs pour PiSocket sont plutôt similaires à celles de Pi, avec une diminution de l'erreur en fonction du nombre de points.
+
+### Expérience de sockets avec plusieurs machines
+
+La dernière expérience consiste à exécuter l'algorithme PiSocket sur plusieurs machines en utilisant des sockets pour la communication. On a utilisé plusieurs machines de la salle G26 de l'IUT pour effectuer cette expérience. Chaque machine a été configurée pour exécuter un worker avec un nombre défini de points à générer. Le maître a été exécuté sur une machine distincte pour coordonner les workers et agréger les résultats. Une variante consiste à faire une double parallélisation, avec un nombre de workers proportionnel au nombre de threads de chaque machine.
+
+TODO
+
+## Conclusion
+
+La conclusion de cette étude approfondie sur la méthode de Monte Carlo pour l'estimation de $\pi$ met en lumière plusieurs aspects importants de la programmation parallèle et distribuée.
+
+Tout d'abord, les implémentations parallèles (Pi et PiSocket) ont démontré une amélioration significative des performances par rapport à une exécution séquentielle. L'analyse de la scalabilité forte a révélé un speedup quasi-linéaire jusqu'à 16 workers sur la machine de test, ce qui correspond aux capacités matérielles de l'ordinateur utilisé. Cette observation souligne l'importance de prendre en compte les contraintes matérielles lors de la conception d'algorithmes parallèles.
+
+L'expérimentation a clairement mis en évidence les limites imposées par le matériel, avec un plafonnement des performances au-delà de 16 threads. Ce phénomène illustre la nécessité d'optimiser l'utilisation des ressources disponibles et de considérer les compromis entre le nombre de workers et l'efficacité globale du système.
+
+En ce qui concerne la scalabilité faible, les résultats se sont révélés moins probants, avec des speedups généralement inférieurs à 1. Cela indique que l'augmentation de la charge de travail n'améliore pas proportionnellement les performances, soulignant l'importance d'une conception soigneuse des algorithmes pour gérer efficacement des charges de travail croissantes.
+
+L'étude a également mis en évidence le compromis entre précision et performance. L'augmentation du nombre de points améliore la précision de l'estimation de $\pi$, mais au prix d'un temps de calcul plus long. Il est donc crucial de trouver un équilibre optimal entre ces deux facteurs en fonction des besoins spécifiques de l'application.
+
+La comparaison entre les approches Pi (utilisant des threads) et PiSocket (utilisant des sockets) a montré que l'implémentation Pi était légèrement plus performante. Cette différence peut être attribuée à l'overhead de communication introduit par l'utilisation des sockets dans PiSocket.
+
+Enfin, l'analyse des performances dans le cadre de la norme ISO/IEC 25010 a démontré que les algorithmes présentent de bonnes performances en termes d'efficacité et de précision. Cependant, il existe encore des opportunités d'optimisation, notamment dans la gestion de l'overhead et l'adaptation dynamique à différentes architectures matérielles.
+
+Cette étude ouvre des perspectives pour de futures recherches, notamment dans l'optimisation des algorithmes pour une meilleure scalabilité faible et dans l'exploration de techniques avancées de parallélisation pour surmonter les limitations matérielles observées.
+
+## Références
+
+- Cours de Programmation Avancée, T. Dufaud.
+- Code assignment102 :
+  - Auteur : Karthik Jain (Software Developer, <https://www.krthkj.com>)
+  - Source : <https://gist.github.com/krthkj/9c1868c1f69142c2952683ea91ca2a37>
+- Code Pi :
+  - Auteur : Dr. Steve Kautz, IOWA State University, <https://faculty.sites.iastate.edu/smkautz/>
+
+- Technologies utilisées :
+  - Java + bibliothèques natives - Langage de programmation
+  - IntelliJ IDEA - Environnement de développement intégré
+  - Visual Studio Code - Environnement de développement intégré
+  - Git + GitHub - Gestion de versions et hébergement de code
+  - StarUML - Modélisation UML
+  - Perplexity Research - Recherches diverses
+  - Python, NumPy, Matplotlib - Analyse de données
