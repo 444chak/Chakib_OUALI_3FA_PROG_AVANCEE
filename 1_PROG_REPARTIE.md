@@ -1,8 +1,25 @@
-# Rapport de Programmation Avancée
+# Rapport - Introduction à la Programmation Répartie - Programmation Avancée
 
 Chakib OUALI - 3FA - 2024
 
 ---
+
+- [Rapport - Introduction à la Programmation Répartie - Programmation Avancée](#rapport---introduction-à-la-programmation-répartie---programmation-avancée)
+  - [Introduction](#introduction)
+  - [TD / TP 1 Mobile](#td--tp-1-mobile)
+    - [Mobile : Analyse des sources / Introduction](#mobile--analyse-des-sources--introduction)
+    - [Mobile : Implémentation](#mobile--implémentation)
+      - [Mobile : Utilisation des Sémaphores](#mobile--utilisation-des-sémaphores)
+      - [Mobile : Utilisation de `synchronized` en Java](#mobile--utilisation-de-synchronized-en-java)
+  - [TD / TP 3 : Boîte aux lettres](#td--tp-3--boîte-aux-lettres)
+    - [Boîte aux lettres : Analyse des sources / Introduction](#boîte-aux-lettres--analyse-des-sources--introduction)
+    - [Boîte aux lettres : Implémentation](#boîte-aux-lettres--implémentation)
+      - [Boîte aux lettres : Boîte aux lettres simple](#boîte-aux-lettres--boîte-aux-lettres-simple)
+      - [Boîte aux lettres : Boîte aux lettres avec `BlockingQueue`](#boîte-aux-lettres--boîte-aux-lettres-avec-blockingqueue)
+  - [Conclusion](#conclusion)
+  - [Références](#références)
+    - [Apprentissage](#apprentissage)
+    - [Technologies / Outils](#technologies--outils)
 
 ## Introduction
 
@@ -38,8 +55,7 @@ On retrouve les classes suivantes :
 `UnMobile` : classe qui hérite de `JPanel` et qui dessine le mobile.
 `UneFenetre` : classe qui hérite de `JFrame` et qui affiche la fenêtre.
 
-Diagramme UML des classes du TP 1 Mobile :
-[![Diagramme UML TP 1 Mobile](TP_1_Mobile_UML.jpg)](TP_1_Mobile_UML.jpg)
+![Diagramme UML TP 1 Mobile](assets/TP_1_Mobile_UML.jpg)
 
 ### Mobile : Implémentation
 
@@ -122,7 +138,7 @@ est une classe abstraite.
 
 Diagramme UML des classes du package Semaphores :
 
-[![Diagramme UML TP 2 Sémaphores](Semaphores_UML.jpg)](Semaphores_UML.jpg)
+[![Diagramme UML TP 2 Sémaphores](assets/Semaphores_UML.jpg)](assets/Semaphores_UML.jpg)
 
 En utilisant la classe `Semaphore`, il est possible de gérer la section critique d'un programme en le surchargeant avec les fonctions `syncWait` et `syncSignal`.
 
@@ -189,7 +205,7 @@ La classe `Main` permet de lancer le programme.
 
 Diagramme UML des classes du TP 3 Boîte aux lettres :
 
-[![Diagramme UML TP 3 Boîte aux lettres](TP_3_BAL_UML.jpg)](TP_3_BAL_UML.jpg)
+[![Diagramme UML TP 3 Boîte aux lettres](assets/TP_3_BAL_UML.jpg)](assets/TP_3_BAL_UML.jpg)
 
 ### Boîte aux lettres : Implémentation
 

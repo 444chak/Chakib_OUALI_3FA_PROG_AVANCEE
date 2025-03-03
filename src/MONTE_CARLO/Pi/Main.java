@@ -1,14 +1,17 @@
-package MONTE_CARLO;
+package MONTE_CARLO.Pi;
+
+import MONTE_CARLO.Result;
+
 /**
  * Approximates PI using the Monte Carlo method. Demonstrates use of Callables,
  * Futures, and thread pools.
  */
-public class Pi {
+public class Main {
+
     public static void main(String[] args) throws Exception {
-        long total;
+        Result result;
         // 10 workers, 50000 iterations each
-        total = new Master().doRun(5000000, 10);
-        System.out.println("total from Master = " + total);
+        result = new Master().doRun(5000000, 10, true, false);
+        System.out.println("total from Master = " + result.getTotal());
     }
 }
-

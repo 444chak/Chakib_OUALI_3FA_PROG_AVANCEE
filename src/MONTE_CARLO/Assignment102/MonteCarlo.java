@@ -1,4 +1,4 @@
-package MONTE_CARLO;
+package MONTE_CARLO.Assignment102;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

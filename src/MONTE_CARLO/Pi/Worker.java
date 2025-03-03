@@ -1,4 +1,4 @@
-package MONTE_CARLO;
+package MONTE_CARLO.Pi;
 
 import java.util.Random;
 import java.util.concurrent.Callable;
