@@ -48,6 +48,8 @@ public class WorkerSocket {
                 Result result = master.doRun(numIterations / numWorkers, numWorkers, false, false);
                 long circleCount = result.getTotal();
                 pWrite.println(circleCount);
+                System.out.println("circleCount = " + circleCount);
+                System.out.println("Time = " + result.getTime());
             }
         }
         bRead.close();
