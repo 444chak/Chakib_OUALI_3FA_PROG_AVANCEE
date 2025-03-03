@@ -580,7 +580,23 @@ Les erreurs pour PiSocket sont plutôt similaires à celles de Pi, avec une dimi
 
 La dernière expérience consiste à exécuter l'algorithme PiSocket sur plusieurs machines en utilisant des sockets pour la communication. On a utilisé plusieurs machines de la salle G26 de l'IUT pour effectuer cette expérience. Chaque machine a été configurée pour exécuter un worker avec un nombre défini de points à générer. Le maître a été exécuté sur une machine distincte pour coordonner les workers et agréger les résultats. Une variante consiste à faire une double parallélisation, avec un nombre de workers proportionnel au nombre de threads de chaque machine.
 
-TODO
+Dans un premier temps, il faut préparé les machines en installant Java et en désactivant le pare-feu, pour la configuration des ports.
+
+```bash
+sudo yum install java-devel
+sudo systemctl stop firewalld
+```
+
+Pour lancer le worker socket, on compile et exécute le programme avec les paramètres correspondants :
+
+```bash
+javac MONTE_CARLO/Sockets/WorkerSocket.java
+javac MONTE_CARLO/Sockets/MasterSocket.java
+
+java MONTE_CARLO.Sockets.WorkerSocket PORT
+```
+
+Pour le master, il faut cependant légèrement modifier le code pour inscrire les adresses IP
 
 ## Conclusion
 
