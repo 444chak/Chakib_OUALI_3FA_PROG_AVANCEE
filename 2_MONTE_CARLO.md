@@ -56,7 +56,13 @@ Chakib OUALI - 3FA - 2024
 
 ## Introduction
 
-Ce rapport présente l'implémentation et l'analyse de la méthode de Monte Carlo pour estimer la valeur de $\pi$. La méthode de Monte Carlo est une technique de simulation qui utilise des nombres aléatoires pour résoudre des problèmes mathématiques ou physiques. Dans ce cas, nous utilisons cette méthode pour estimer la valeur de $\pi$ en générant des points aléatoires dans un carré et en comptant combien de ces points tombent à l'intérieur d'un cercle inscrit dans ce carré.
+Le calcul de $\pi$, cette constante mathématique fondamentale représentant le rapport entre la circonférence d'un cercle et son diamètre, a fasciné les mathématiciens et les scientifiques depuis des millénaires. Parmi les nombreuses méthodes développées pour estimer sa valeur, la méthode de Monte Carlo se distingue par son approche probabiliste et sa capacité à tirer parti des avancées en matière de calcul parallèle et distribué.
+
+Ce rapport présente une analyse approfondie de l'implémentation et de l'optimisation de la méthode de Monte Carlo pour estimer la valeur de $\pi$. Cette technique de simulation, qui tire son nom des célèbres casinos de Monaco, utilise des nombres aléatoires pour résoudre des problèmes mathématiques complexes. Dans le cas présent, nous exploitons cette méthode pour approximer $\pi$ en générant des points aléatoires dans un carré et en déterminant la proportion de ces points qui tombent à l'intérieur d'un cercle inscrit dans ce carré.
+
+L'intérêt de cette étude ne réside pas seulement dans l'estimation de $\pi$ elle-même, mais aussi dans l'exploration des possibilités offertes par le calcul parallèle et distribué pour accélérer et améliorer la précision de cette estimation. En effet, la nature intrinsèquement parallélisable de la méthode de Monte Carlo en fait un cas d'étude idéal pour examiner les avantages et les défis de la programmation parallèle moderne.
+
+Au cours de ce rapport, nous examinerons différentes implémentations de l'algorithme, allant d'une approche utilisant des threads locaux à une version distribuée employant des sockets pour la communication entre machines. Nous analyserons en détail les performances de ces implémentations, leur scalabilité, et les compromis entre précision et temps de calcul. Cette étude nous permettra non seulement d'approfondir notre compréhension de la méthode de Monte Carlo, mais aussi d'explorer les principes fondamentaux de la programmation parallèle et distribuée, essentiels dans l'ère du calcul haute performance.
 
 ## Principe de la méthode de Monte Carlo
 
@@ -338,7 +344,7 @@ Le speedup idéal est linéaire, c'est-à-dire que le speedup est égal au nombr
 
 <img src="assets/f2_perfect_speedup.png" alt="Speedup" width="500">
 
-*Figure 2 : Speedup idéal*
+*Figure 2 : Speedup idéal*  
 
 Dans cette figure la droite noire correspond le speedup idéal dans le cas de la scalabilité forte. La droite bleue correspond quant à elle à la scalabilité faible.
 
