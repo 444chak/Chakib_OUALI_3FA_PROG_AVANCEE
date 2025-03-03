@@ -596,7 +596,7 @@ javac MONTE_CARLO/Sockets/MasterSocket.java
 java MONTE_CARLO.Sockets.WorkerSocket PORT
 ```
 
-Pour le master, il faut cependant légèrement modifier le code pour inscrire les adresses IP
+Pour simplifier l'utilisation d'adresses IP en réseau local en G26, on modifie légèrement chaque code (MasterSocketNetwork et WorkerSocketNetwork, disponibles dans le dossier `MONTE_CARLO/Sockets/`) pour qu'ils utilisent des adresses IP.
 
 ## Conclusion
 

@@ -49,6 +49,8 @@ public class WorkerSocketNetwork {
                 int numWorkers = Integer.parseInt(str2);
                 Result result = master.doRun(numIterations / numWorkers, numWorkers, false, false);
                 long circleCount = result.getTotal();
+                System.out.println("circleCount = " + circleCount);
+                System.out.println("Time = " + result.getTime());
                 pWrite.println(circleCount);
             }
         }
