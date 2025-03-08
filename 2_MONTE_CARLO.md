@@ -627,7 +627,7 @@ On observe que l'erreur diminue en fonction du nombre de points, ce qui est conf
 
 On observe une très bonne scalabilité faible, contrairement à ce que nous avons observé précédemment. Cela est dû à l'utilisation de plusieurs machines pour exécuter le calcul sur un réseau plutôt que sur des workers au sein d'une même machine. Cette distribution du calcul sur plusieurs machines physiques permet d'éliminer la contention des ressources matérielles et d'exploiter pleinement la puissance de calcul de chaque machine.
 
-Dans l'expérience en réseau local, le temps d'exécution reste remarquablement stable (environ 70 secondes) malgré l'augmentation massive du nombre de points calculés, passant de 2×10^9 à 128×10^9 points. Cette stabilité temporelle, combinée à une diminution significative de l'erreur (d'environ 10^-5 à 10^-6), démontre l'efficacité de notre approche distribuée.
+Dans l'expérience en réseau local, le temps d'exécution reste remarquablement stable (environ 70 secondes) malgré l'augmentation massive du nombre de points calculés, passant de $2 \times 10^9$ à $128 \times 10^9$ points. Cette stabilité temporelle, combinée à une diminution significative de l'erreur (d'environ $10^{-5}$ à $10^{-6}$), démontre l'efficacité de notre approche distribuée.
 
 L'expérience en salle G26 nous a permis de confirmer empiriquement les avantages théoriques d'une architecture distribuée pour des problèmes hautement parallélisables comme la méthode de Monte Carlo. La capacité à maintenir un temps d'exécution quasi constant tout en augmentant considérablement la précision du calcul illustre parfaitement le concept de scalabilité faible.
 
