@@ -519,7 +519,7 @@ Cependant, l'overhead semble plus faible avec $10^9$, ce qui indique que l'utili
 #### Points clés
 
 - **Scalabilité** : L'algorithme montre une bonne scalabilité jusqu'à 16 workers, mais est limité par le matériel au-delà.
-- **Précision** : La précision augmente avec le nombre de points, 10^9 points étant plus précis que 10^7.
+- **Précision** : La précision augmente avec le nombre de points, $10^9$ points étant plus précis que $10^7$.
 - **Limite matérielle** : La limite matérielle est identifiée à 16 threads parallèles.
 
 L'algorithme présente de bonnes performances selon la norme ISO/IEC 25010, avec une scalabilité efficace jusqu'aux limites matérielles. L'augmentation du nombre de points améliore la précision, mais le gain en speedup est limité par les capacités de la machine au-delà de 16 workers.
