@@ -483,36 +483,36 @@ def assignment102Curves(subplot):
 
 ############# ass102 error
 
-error10e6 = extract_error(
-    dir_out
-    / "CHAK_LAPTOP"
-    / "Assignment102"
-    / "s_forte"
-    / "10W_10E6_Assignment102_CHAK-LAPTOP.txt"
-)
+# error10e6 = extract_error(
+#     dir_out
+#     / "CHAK_LAPTOP"
+#     / "Assignment102"
+#     / "s_forte"
+#     / "10W_10E6_Assignment102_CHAK-LAPTOP.txt"
+# )
 
-error10e7 = extract_error(
-    dir_out
-    / "CHAK_LAPTOP"
-    / "Assignment102"
-    / "s_forte"
-    / "8W_10E7_Assignment102_CHAK-LAPTOP.txt"
-)
+# error10e7 = extract_error(
+#     dir_out
+#     / "CHAK_LAPTOP"
+#     / "Assignment102"
+#     / "s_forte"
+#     / "8W_10E7_Assignment102_CHAK-LAPTOP.txt"
+# )
 
-data_dict = {
-    "10^6 points": error10e6,
-    "10^7 points": error10e7,
-}
+# data_dict = {
+#     "10^6 points": error10e6,
+#     "10^7 points": error10e7,
+# }
 
-plot_error_graph(
-    data_dict,
-    "Error vs Number of Points - Assignment 102",
-    "Number of Points (Npoints)",
-    "Absolute Error",
-)
+# plot_error_graph(
+#     data_dict,
+#     "Error vs Number of Points - Assignment 102",
+#     "Number of Points (Npoints)",
+#     "Absolute Error",
+# )
 
-plt.tight_layout()
-plt.show()
+# plt.tight_layout()
+# plt.show()
 
 
 ###############
@@ -635,4 +635,99 @@ plt.show()
 # )
 
 # plt.tight_layout()
+# plt.show()
+
+################### Erreur expérience distribuée ################
+# data = [
+#     (2 * 10**9, 2.3575172837409821 * 10**-5),
+#     (4 * 10**9, 1.0177846524687415 * 10**-5),
+#     (8 * 10**9, 1.0747921043959614 * 10**-5),
+#     (1.6 * 10**10, 4.6105085509244952 * 10**-6),
+#     (3.2 * 10**10, 2.8263219557848443 * 10**-6),
+#     (6.4 * 10**10, 1.2763940615949628 * 10**-6),
+#     (1.28 * 10**11, 1.3741649324992772 * 10**-6),
+# ]
+
+# plt.figure(figsize=(10, 8))
+
+# points = [d[0] for d in data]
+# erreurs = [d[1] for d in data]
+
+# plt.loglog(points, erreurs, "bo-", markersize=8, linewidth=2)
+
+# for i, (x, y) in enumerate(zip(points, erreurs)):
+#     plt.annotate(
+#         f"{x:.1e}",
+#         xy=(x, y),
+#         xytext=(5, 5),
+#         textcoords="offset points",
+#         ha="left",
+#         va="bottom",
+#         bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="gray", alpha=0.7),
+#     )
+
+# log_points = np.log10(points)
+# log_erreurs = np.log10(erreurs)
+# pente, ordonnee = np.polyfit(log_points, log_erreurs, 1)
+
+# x_range = np.logspace(np.log10(min(points)), np.log10(max(points)), 100)
+# plt.loglog(
+#     x_range,
+#     10 ** (ordonnee) * x_range**pente,
+#     "r--",
+#     label=f"Pente: {pente:.3f} (1/√N: {-0.5:.3f})",
+# )
+
+# plt.xlabel("Nombre de Points (N)")
+# plt.ylabel("Error")
+# plt.title("Error vs Nombre de Points - Monte Carlo Distribué")
+# plt.grid(True, which="both", ls="--", alpha=0.7)
+# plt.legend()
+
+# plt.loglog(x_range, 0.01 * x_range ** (-0.5), "g:", label="Théorique: 1/√N")
+# plt.legend()
+
+# plt.tight_layout()
+# plt.show()
+
+
+########### Speedup expériences distribuées ###########
+
+# data_time = [
+#     (1, 68974),
+#     (2, 69189),
+#     (4, 70436),
+#     (8, 70450),
+#     (16, 70484),
+#     (32, 71908),
+#     (64, 70890),
+# ]
+
+
+# def speedup_manual(data_time):
+#     speedups = []
+#     for i in range(len(data_time)):
+#         speedups.append([data_time[i][0], data_time[0][1] / data_time[i][1]])
+#     return speedups
+
+
+# speedups = speedup_manual(data_time)
+
+# speedupCurve = speedup_curve(speedups, "Distributed Monte Carlo (Weak Scaling)")
+
+# plt.figure(figsize=(10, 8))
+# plt.plot(
+#     [1, 64], [1, 1], ":", label="Perfect Weak Scaling", c="black"
+# )  # Horizontal line at y=1
+
+# plot_curve(speedupCurve, plt)
+
+# plt.xlabel("Number of Workers")
+# plt.ylabel("Efficiency (T₁/Tₚ)")
+# plt.grid(True)
+# plt.title("Weak Scaling - Distributed Monte Carlo")
+# plt.xlim(0, 64 + 0.5)
+# plt.ylim(0, 1.5)
+# plt.xticks(range(0, 65, 4))
+# plt.legend()
 # plt.show()

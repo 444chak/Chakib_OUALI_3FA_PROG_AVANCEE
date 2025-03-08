@@ -578,7 +578,7 @@ Les erreurs pour PiSocket sont plutôt similaires à celles de Pi, avec une dimi
 
 ### Expérience de sockets avec plusieurs machines
 
-La dernière expérience consiste à exécuter l'algorithme PiSocket sur plusieurs machines en utilisant des sockets pour la communication. On a utilisé plusieurs machines de la salle G26 de l'IUT pour effectuer cette expérience. Chaque machine a été configurée pour exécuter un worker avec un nombre défini de points à générer. Le maître a été exécuté sur une machine distincte pour coordonner les workers et agréger les résultats. Une variante consiste à faire une double parallélisation, avec un nombre de workers proportionnel au nombre de threads de chaque machine.
+La dernière expérience consiste à exécuter l'algorithme PiSocket sur plusieurs machines en utilisant des sockets pour la communication. On a utilisé plusieurs machines de la salle G26 de l'IUT pour effectuer cette expérience. Chaque machine a été configurée pour exécuter un worker avec un nombre défini de points à générer. Le maître a été exécuté sur une machine distincte pour coordonner les workers et agréger les résultats. Une variante consiste à faire une double parallélisation, avec un nombre de workers proportionnel au nombre de threads de chaque machine. Il s'agit d'une parallélisation à mémoire distribuée.
 
 Dans un premier temps, il faut préparé les machines en installant Java et en désactivant le pare-feu, pour la configuration des ports.
 
@@ -597,6 +597,41 @@ java MONTE_CARLO.Sockets.WorkerSocket PORT
 ```
 
 Pour simplifier l'utilisation d'adresses IP en réseau local en G26, on modifie légèrement chaque code (MasterSocketNetwork et WorkerSocketNetwork, disponibles dans le dossier `MONTE_CARLO/Sockets/`) pour qu'ils utilisent des adresses IP.
+
+Cependant, durant l'expérience en salle, chaque étudiant exécute ses workers sur sa machine, et la machine d'un autre étudiant est utilisée pour le master de tous les workers. On a donc utilisé les adresses IP des machines pour la communication.
+
+On a exécuté l'expérience avec 1, 2, 4, 8, 16, 32 et 64 workers avec un nombre de points de $2*10^9$ par workers. Chaque machine exécute 4 workers. À 16 machines, on a 64 workers. Les résultats sont les suivants :
+2000000000
+
+| Nombre de machines | Nombre de workers | Nombre de points total | Temps d'exécution (ms) | Erreur                              |
+| ------------------ | ----------------- | ---------------------- | ---------------------- | ----------------------------------- |
+| 1                  | 1                 | $2 \times 10^9$        | 68974                  | $2.3575172837409821 \times 10^{-5}$ |
+| 1                  | 2                 | $4 \times 10^9$        | 69189                  | $1.0177846524687415 \times 10^{-5}$ |
+| 1                  | 4                 | $8 \times 10^9$        | 70436                  | $1.0747921043959614 \times 10^{-5}$ |
+| 2                  | 8                 | $1.6 \times 10^{10}$   | 70450                  | $4.6105085509244952 \times 10^{-6}$ |
+| 4                  | 16                | $3.2 \times 10^{10}$   | 71908                  | $2.8263219557848443 \times 10^{-6}$ |
+| 8                  | 32                | $6.4 \times 10^{10}$   | 70484                  | $1.2763940615949628 \times 10^{-6}$ |
+| 16                 | 64                | $1.28 \times 10^{11}$  | 70890                  | $1.3741649324992772 \times 10^{-6}$ |
+
+Avec ces valeurs, on peut afficher à la fois le speedup mais aussi l'erreur en fonction du nombre de points.
+
+<img src="assets/f15_error_exp_g26.png" alt="Erreur Monte Carlo PiSocket faible scalabilité" width="800">
+
+*Figure 13 : Erreur en fonction du nombre de points pour l'estimation de $\pi$ avec PiSocket en scalabilité faible en réseau local*
+
+On observe que l'erreur diminue en fonction du nombre de points, ce qui est conforme à ce qu'on a observé précédemment. On peut également observer le speedup en fonction du nombre de workers :
+
+<img src="assets/f16_speedup_exp_g26.png" alt="Speedup Monte Carlo PiSocket faible scalabilité" width="800">
+
+*Figure 14 : Speedup en fonction du nombre de workers pour l'estimation de $\pi$ avec PiSocket en scalabilité faible en réseau local*
+
+On observe une très bonne scalabilité faible, contrairement à ce que nous avons observé précédemment. Cela est dû à l'utilisation de plusieurs machines pour exécuter le calcul sur un réseau plutôt que sur des workers au sein d'une même machine. Cette distribution du calcul sur plusieurs machines physiques permet d'éliminer la contention des ressources matérielles et d'exploiter pleinement la puissance de calcul de chaque machine.
+
+Dans l'expérience en réseau local, le temps d'exécution reste remarquablement stable (environ 70 secondes) malgré l'augmentation massive du nombre de points calculés, passant de 2×10^9 à 128×10^9 points. Cette stabilité temporelle, combinée à une diminution significative de l'erreur (d'environ 10^-5 à 10^-6), démontre l'efficacité de notre approche distribuée.
+
+L'expérience en salle G26 nous a permis de confirmer empiriquement les avantages théoriques d'une architecture distribuée pour des problèmes hautement parallélisables comme la méthode de Monte Carlo. La capacité à maintenir un temps d'exécution quasi constant tout en augmentant considérablement la précision du calcul illustre parfaitement le concept de scalabilité faible.
+
+Cette expérience démontre également la pertinence du modèle master-worker distribué pour des calculs intensifs sur des problèmes divisibles. En effet, la communication entre les machines s'est avérée suffisamment légère pour ne pas impacter significativement les performances globales du système.
 
 ## Conclusion
 
